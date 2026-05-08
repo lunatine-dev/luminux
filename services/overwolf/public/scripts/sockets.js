@@ -11,7 +11,9 @@ export function registerSockets(core) {
         auth: {
             token: core.token,
         },
-        reconnectionAttempts: 5,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
     });
 
     socket.on("connect", () => {
