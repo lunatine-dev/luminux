@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "dev": "pnpm -r --parallel dev",
-        "build": "pnpm -r build"
+        "build": "pnpm -r build",
+        "dev:core": "pnpm --filter api --filter frontend --parallel dev",
+        "dev:api": "pnpm --filter api dev"
     },
     "keywords": [],
     "author": "",
@@ -13,6 +15,7 @@
     "packageManager": "pnpm@10.27.0",
     "devDependencies": {
         "prettier": "^3.8.3",
-        "prettier-plugin-svelte": "^3.5.1"
+        "prettier-plugin-svelte": "^3.5.1",
+        "typescript": "~6.0.3"
     }
 }
