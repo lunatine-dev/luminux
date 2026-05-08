@@ -11,7 +11,7 @@ import { FastifyError, FastifyPluginAsync, FastifyRequest, FastifyReply } from "
 
 const schema = {
     type: "object",
-    required: ["MONGO_URI", "PORT"],
+    required: ["REDIS_URI", "MONGO_URI", "PORT"],
     properties: {
         RATE_LIMIT_MAX: {
             type: "number",

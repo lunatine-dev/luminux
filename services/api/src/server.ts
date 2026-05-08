@@ -2,8 +2,6 @@ import Fastify from "fastify";
 import fp from "fastify-plugin";
 import closeWithGrace from "close-with-grace";
 
-import mongoose from "mongoose";
-
 import serviceApp from "./app";
 
 const app = Fastify({
@@ -22,31 +20,21 @@ const app = Fastify({
     trustProxy: process.env.NODE_ENV === "production",
 });
 
-let connected = false;
+closeWithGrace({ delay: 1000 }, async ({ err, signal }) => {
+    if (err) app.log.error(err);
+    app.log.info({ signal }, "Graceful shutdown initiated");
+
+    await app.close();
+});
 
 const init = async () => {
     app.register(fp(serviceApp));
-
-    closeWithGrace(
-        {
-            delay: 1000,
-        },
-        async ({ err }) => {
-            if (err != null) app.log.error(err);
-            if (connected) await mongoose.disconnect();
-            await app.close();
-        },
-    );
 
     await app.ready();
     app.swagger();
     app.log.info("Plugins loaded");
 
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        connected = true;
-        app.log.info("Connected to MongoDB");
-
         app.listen(
             {
                 host: "0.0.0.0",
