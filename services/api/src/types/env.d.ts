@@ -1,7 +1,7 @@
 export type Env = {
     MONGO_URI: string;
     REDIS_URI: string;
-    PORT?: number;
+    PORT: number;
     RATE_LIMIT_MAX: number;
 
     TWITCH_CLIENT_ID: string;

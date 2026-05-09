@@ -38,7 +38,7 @@ const init = async () => {
         app.listen(
             {
                 host: "0.0.0.0",
-                port: process.env.PORT ?? 3000,
+                port: parseInt(process.env.PORT ?? "3000", 10),
             },
             (err, address) => {
                 app.log.info("App listening at " + address);
