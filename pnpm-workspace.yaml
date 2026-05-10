@@ -1,8 +1,8 @@
 packages:
-  - services/*
-  - core/*
+    - services/*
+    - core/*
 
 onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - argon2
-  - esbuild
+    - "@tailwindcss/oxide"
+    - argon2
+    - esbuild
