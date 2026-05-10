@@ -1,5 +1,4 @@
 import { TwitchUser } from "@defs/twitch";
-import { FastifyBaseLogger } from "fastify";
 
 import axios from "axios";
 import { AppError } from "@core/errors";

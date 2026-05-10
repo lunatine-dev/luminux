@@ -1,4 +1,3 @@
-import { FastifyBaseLogger } from "fastify";
 import { UserModel } from "@models/User";
 import { getDummyHash, verify } from "@services/auth/password";
 import { AppError } from "@core/errors";
