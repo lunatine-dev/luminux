@@ -3,7 +3,7 @@ import { callbackSchema } from "./schema";
 import { authHandlers } from "./handler";
 
 const routes: FastifyPluginAsync = async (fastify) => {
-    fastify.get("callback", { schema: callbackSchema }, authHandlers.callback);
+    fastify.get("/callback", { schema: callbackSchema }, authHandlers.callback);
 };
 
 export default routes;
