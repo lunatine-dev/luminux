@@ -1,37 +1,42 @@
 import type { FastifySchema, RouteHandler } from "fastify";
 import { Type, Static } from "typebox";
-
-import { ErrorResponse } from "@defs/error";
-
+import { ErrorResponse, ErrorResponseType, StandardReply } from "@defs/http";
 import { SWAGGER_TAGS } from "@constants/swagger-tags";
 
-// --- Shared ---
+// --- Shared Definitions ---
 export const TicketBody = Type.Object({
-    ticket: Type.String({ format: "uuid" }),
+    ticket: Type.String({
+        format: "uuid",
+        description: "The temporary exchange ticket",
+    }),
 });
-const SuccessResponse = Type.Object({
+
+export const TicketSuccessResponse = Type.Object({
     accessToken: Type.String(),
     refreshToken: Type.String(),
 });
 
+// --- Static Types for Handlers ---
 export type TicketBodyType = Static<typeof TicketBody>;
-export type SuccessResponseType = Static<typeof SuccessResponse>;
+export type TicketSuccessResponseType = Static<typeof TicketSuccessResponse>;
 
-// --- Schema ---
-/**
- * POST /ticket/consume
- */
-export const ticketSchema: FastifySchema = {
-    body: TicketBody,
-    response: {
-        200: SuccessResponse,
-        401: ErrorResponse,
-    },
-    tags: [SWAGGER_TAGS.AUTH],
+// --- Schemas ---
+export const Schemas = {
+    Consume: {
+        tags: [SWAGGER_TAGS.AUTH],
+        summary: "Exchange a ticket for authentication tokens",
+        body: TicketBody,
+        response: {
+            200: TicketSuccessResponse,
+            400: ErrorResponse,
+            401: ErrorResponse,
+            500: ErrorResponse,
+        },
+    } satisfies FastifySchema,
 };
 
-// --- Handlers ---
+// --- Handler Types ---
 export type ConsumeHandler = RouteHandler<{
     Body: TicketBodyType;
-    Reply: SuccessResponseType | Static<typeof ErrorResponse>;
+    Reply: StandardReply<TicketSuccessResponseType>;
 }>;

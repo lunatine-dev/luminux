@@ -1,10 +1,9 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import { TicketBodyType } from "./schema";
+import { ConsumeHandler } from "./schema";
 
 import { consumeTicket } from "@services/auth/ticket-manager";
 
 export const handlers = {
-    consume: async (request: FastifyRequest<{ Body: TicketBodyType }>, reply: FastifyReply) => {
+    consume: (async (request, reply) => {
         const { ticket } = request.body;
 
         const payload = await consumeTicket(request.server, ticket);
@@ -14,5 +13,5 @@ export const handlers = {
         }
 
         return payload;
-    },
+    }) satisfies ConsumeHandler,
 };

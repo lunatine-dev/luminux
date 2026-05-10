@@ -5,7 +5,7 @@ export default fp(async (fastify) => {
     mongoose.connection.on("connected", () => fastify.log.info("Connected to MongoDB"));
     mongoose.connection.on("error", (err) => fastify.log.error(err, "MongoDB Error"));
 
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(String(process.env.MONGO_URI));
 
     fastify.decorate("mongoose", mongoose.connection);
 

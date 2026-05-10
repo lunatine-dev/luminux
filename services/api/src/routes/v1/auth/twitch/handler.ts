@@ -1,5 +1,4 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import { CallbackQueryType } from "./schema";
+import { TwitchCallbackHandler } from "./schema";
 
 import crypto from "node:crypto";
 
@@ -8,8 +7,8 @@ import { processTwitchAuth } from "@services/auth/providers/twitch";
 import { issueAccessToken } from "@services/auth/access-token-service";
 import { saveTicket } from "@services/auth/ticket-manager";
 
-export const authHandlers = {
-    callback: async (request: FastifyRequest<{ Querystring: CallbackQueryType }>, reply: FastifyReply) => {
+export const handlers = {
+    callback: (async (request, reply) => {
         const { token } = await request.server.twitchOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
 
         try {
@@ -38,14 +37,11 @@ export const authHandlers = {
             return reply.redirect(`${process.env.ORIGIN_SERVER}/api/callback?ticket=${ticketName}`);
         } catch (err) {
             if (err instanceof AppError) {
-                return reply.code(err.statusCode).send({
-                    error: err.name,
-                    message: err.message,
-                });
+                return reply.code(err.statusCode).send(err.serialize());
             }
 
             request.log.error(err);
             return reply.internalServerError("Something went wrong");
         }
-    },
+    }) satisfies TwitchCallbackHandler,
 };

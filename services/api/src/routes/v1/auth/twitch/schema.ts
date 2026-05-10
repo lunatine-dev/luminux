@@ -1,26 +1,40 @@
-import type { FastifySchema } from "fastify";
-import { ErrorResponse } from "@defs/error";
+import type { FastifySchema, RouteHandler } from "fastify";
 import { Type, Static } from "typebox";
-
+import { ErrorResponse, RedirectResponse, RedirectResponseType, StandardReply } from "@defs/http";
 import { SWAGGER_TAGS } from "@constants/swagger-tags";
 
-// Shared
-
-// Schemas
-/**
- * GET /twitch/callback
- */
-export const CallbackQuery = Type.Object({
-    code: Type.String(),
-    state: Type.Optional(Type.String()),
+// --- Shared Definitions ---
+export const TwitchCallbackQuery = Type.Object({
+    code: Type.String({
+        description: "The authorization code returned by Twitch",
+    }),
+    state: Type.Optional(
+        Type.String({
+            description: "The state parameter to prevent CSRF",
+        }),
+    ),
 });
-export type CallbackQueryType = Static<typeof CallbackQuery>;
-export const callbackSchema: FastifySchema = {
-    querystring: CallbackQuery,
-    response: {
-        302: Type.Null(),
-        400: ErrorResponse,
-        500: ErrorResponse,
-    },
-    tags: [SWAGGER_TAGS.AUTH],
+
+// --- Static Types for Handlers ---
+export type TwitchCallbackQueryType = Static<typeof TwitchCallbackQuery>;
+
+// --- Schemas ---
+export const Schemas = {
+    Callback: {
+        tags: [SWAGGER_TAGS.AUTH],
+        summary: "Twitch OAuth callback handler",
+        description: "Exchanges the Twitch authorization code for a user session",
+        querystring: TwitchCallbackQuery,
+        response: {
+            302: RedirectResponse,
+            400: ErrorResponse,
+            500: ErrorResponse,
+        },
+    } satisfies FastifySchema,
 };
+
+// --- Handler Types ---
+export type TwitchCallbackHandler = RouteHandler<{
+    Querystring: TwitchCallbackQueryType;
+    Reply: StandardReply<RedirectResponseType>;
+}>;
