@@ -2,7 +2,7 @@ import fp from "fastify-plugin";
 import Redis from "ioredis";
 
 export default fp(async (fastify) => {
-    const redis = new Redis(process.env.REDIS_URI, {
+    const redis = new Redis(process.env.REDIS_URI!, {
         connectTimeout: 5000,
         maxRetriesPerRequest: 3,
         family: 4, // Force IPv4
