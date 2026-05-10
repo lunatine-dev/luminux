@@ -3,6 +3,7 @@ import fp from "fastify-plugin";
 import closeWithGrace from "close-with-grace";
 
 import serviceApp from "./app";
+import { initPassword } from "@services/auth/password";
 
 const app = Fastify({
     logger:
@@ -29,6 +30,9 @@ closeWithGrace({ delay: 1000 }, async ({ err, signal }) => {
 
 const init = async () => {
     app.register(fp(serviceApp));
+
+    await initPassword();
+    app.log.info("Decoy hash generated");
 
     await app.ready();
     app.swagger();
