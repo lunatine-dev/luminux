@@ -41,6 +41,7 @@ export const Schemas = {
             302: RedirectResponse,
             400: ErrorResponse,
             409: ErrorResponse,
+            429: ErrorResponse,
             500: ErrorResponse,
         },
     } satisfies FastifySchema,
