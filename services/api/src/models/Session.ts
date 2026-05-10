@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType, Types, Document } from "mongoose";
+import { Schema, model, InferSchemaType, Types } from "mongoose";
 import type { User } from "./User";
 
 const sessionSchema = new Schema(

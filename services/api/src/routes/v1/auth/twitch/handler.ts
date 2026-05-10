@@ -6,7 +6,7 @@ import crypto from "node:crypto";
 import { AppError } from "@core/errors";
 import { processTwitchAuth } from "@services/auth/providers/twitch";
 import { issueAccessToken } from "@services/auth/access-token-service";
-import { saveTicket, consumeTicket } from "@services/auth/ticket-manager";
+import { saveTicket } from "@services/auth/ticket-manager";
 
 export const authHandlers = {
     callback: async (request: FastifyRequest<{ Querystring: CallbackQueryType }>, reply: FastifyReply) => {
