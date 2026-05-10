@@ -1,6 +1,6 @@
 import type { FastifySchema, RouteHandler } from "fastify";
 import { Type, Static } from "typebox";
-import { ErrorResponse, ErrorResponseType, RedirectResponse, RedirectResponseType, StandardReply } from "@defs/http";
+import { ErrorResponse, RedirectResponse, RedirectResponseType, StandardReply } from "@defs/http";
 import { SWAGGER_TAGS } from "@constants/swagger-tags";
 
 // --- Shared Body Definitions ---

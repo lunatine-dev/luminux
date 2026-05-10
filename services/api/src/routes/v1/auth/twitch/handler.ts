@@ -21,7 +21,6 @@ export const handlers = {
                 token.refresh_token ?? "",
                 request.ip,
                 request.headers["user-agent"] ?? "Generic",
-                request.log,
             );
 
             // Generate access token

@@ -4,13 +4,7 @@ import { getDummyHash, verify } from "@services/auth/password";
 import { AppError } from "@core/errors";
 import { issueRefreshToken } from "@services/auth/session-service";
 
-export const processLocalAuth = async (
-    email: string,
-    password: string,
-    ip: string,
-    ua: string,
-    logger: FastifyBaseLogger,
-) => {
+export const processLocalAuth = async (email: string, password: string, ip: string, ua: string) => {
     const user = await UserModel.findOne({
         email,
     }).select("+password");

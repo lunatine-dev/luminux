@@ -17,7 +17,6 @@ export const handlers = {
                 password,
                 request.ip,
                 request.headers["user-agent"] ?? "Generic",
-                request.log,
             );
 
             // Generate access token

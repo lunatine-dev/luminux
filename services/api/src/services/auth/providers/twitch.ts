@@ -29,7 +29,6 @@ export const processTwitchAuth = async (
     twitchRefreshToken: string,
     ip: string,
     ua: string,
-    logger: FastifyBaseLogger,
 ) => {
     const user = await getUser(twitchAccessToken);
     if (!user) throw new AppError("User not found", 401);
