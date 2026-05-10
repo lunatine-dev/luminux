@@ -13,7 +13,10 @@
         "paths": {
             "@constants/*": ["./src/constants/*"],
             "@services/*": ["./src/services/*"],
-            "@utils/*": ["./src/utils/*"]
+            "@utils/*": ["./src/utils/*"],
+            "@core/*": ["./src/core/*"],
+            "@defs/*": ["./src/types/*"],
+            "@models/*": ["./src/models/*"]
         }
     },
     "include": ["src/**/*"]
