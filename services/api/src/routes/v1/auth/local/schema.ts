@@ -12,15 +12,10 @@ export const LocalSignUpBody = Type.Object({
     email: Type.String({ format: "email" }),
     password: Type.String({ minLength: 8, maxLength: 100 }),
 });
-export const SignUpSuccessResponse = Type.Object({
-    success: Type.Boolean(),
-    userId: Type.String(),
-});
 
 // --- Static Types for Handlers ---
 export type LocalLoginBodyType = Static<typeof LocalLoginBody>;
 export type LocalSignUpBodyType = Static<typeof LocalSignUpBody>;
-export type SignUpSuccessResponseType = Static<typeof SignUpSuccessResponse>;
 
 // --- Schemas ---
 export const Schemas = {
@@ -43,7 +38,7 @@ export const Schemas = {
         summary: "Register a new user account",
         body: LocalSignUpBody,
         response: {
-            201: SignUpSuccessResponse,
+            302: RedirectResponse,
             400: ErrorResponse,
             409: ErrorResponse,
             500: ErrorResponse,
@@ -59,5 +54,5 @@ export type LocalLoginHandler = RouteHandler<{
 
 export type LocalSignUpHandler = RouteHandler<{
     Body: LocalSignUpBodyType;
-    Reply: StandardReply<SignUpSuccessResponseType>;
+    Reply: StandardReply<RedirectResponseType>;
 }>;

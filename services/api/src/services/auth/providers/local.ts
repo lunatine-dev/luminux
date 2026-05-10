@@ -1,5 +1,5 @@
 import { UserModel } from "@models/User";
-import { getDummyHash, verify } from "@services/auth/password";
+import { getDummyHash, hash, verify } from "@services/auth/password";
 import { AppError } from "@core/errors";
 import { issueRefreshToken } from "@services/auth/session-service";
 
@@ -20,4 +20,22 @@ export const processLocalAuth = async (email: string, password: string, ip: stri
         sessionId,
         refreshToken: rawToken,
     };
+};
+
+export const processLocalOnboarding = async (email: string, password: string) => {
+    // First check if the email already exists
+    const user = await UserModel.findOne({
+        email,
+    });
+
+    if (user) throw new AppError("Email already in use", 400);
+
+    // Hash the password
+    const hashedPassword = await hash(password);
+
+    // Add user to database
+    return await UserModel.create({
+        email,
+        password: hashedPassword,
+    });
 };
