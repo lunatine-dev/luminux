@@ -6,3 +6,8 @@ export const ErrorResponse = Type.Object({
     message: Type.String(),
 });
 export type ErrorResponseType = Static<typeof ErrorResponse>;
+
+export const RedirectResponse = Type.Null();
+export type RedirectResponseType = Static<typeof RedirectResponse>;
+
+export type StandardReply<T> = T | ErrorResponseType;
