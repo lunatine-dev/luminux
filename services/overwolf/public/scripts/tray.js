@@ -3,7 +3,7 @@ const menu = {
         { label: "Settings", id: "settings" },
         {
             label: "Exit",
-            id: "exti",
+            id: "exit",
         },
     ],
 };
@@ -23,7 +23,11 @@ export const registerTray = () => {
                 bgWindow.openSettings();
             }
         } else if (event.item === "exit") {
-            // Exit
+            overwolf.windows.getCurrentWindow((result) => {
+                if (result.status === "success") {
+                    overwolf.windows.close(result.window.id);
+                }
+            });
         }
     });
 };

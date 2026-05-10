@@ -1,35 +1,8 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { createSettings } from "./lib/settings.svelte";
 
-    let token = $state("");
-    let status = $state("");
-
-    onMount(() => {
-        token = localStorage.getItem("luminux_api_token") || "";
-    });
-
-    function saveSettings() {
-        if (!token.trim()) {
-            status = "Please enter a token";
-            return;
-        }
-
-        // Save to local storage for persistence
-        localStorage.setItem("luminux_api_token", token);
-
-        // Notify the background page
-        const bgWindow = overwolf.windows.getMainWindow() as any;
-        if (bgWindow?.updateToken) {
-            bgWindow.updateToken(token);
-            status = "Settings Saved!";
-        } else {
-            status = "Saved";
-        }
-
-        setTimeout(() => {
-            status = "";
-        }, 3000);
-    }
+    // Initialize the settings state
+    const settings = createSettings();
 
     function closeWindow() {
         overwolf.windows.getCurrentWindow((result) => {
@@ -68,7 +41,7 @@
             <input
                 type="password"
                 id="token"
-                bind:value={token}
+                bind:value={settings.token}
                 placeholder="lnx-xxxxxxxxxxxx"
                 class="bg-[#0d1117] border border-[#30363d] p-2.5 rounded-md font-mono text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all select-text cursor-text"
             />
@@ -84,9 +57,9 @@
             </div>
         </div>
 
-        {#if status}
-            <p class="text-xs mt-4 text-center {status.includes('enter') ? 'text-red-400' : 'text-green-400'}">
-                {status}
+        {#if settings.status}
+            <p class="text-xs mt-4 text-center {settings.status.includes('enter') ? 'text-red-400' : 'text-green-400'}">
+                {settings.status}
             </p>
         {/if}
     </section>
@@ -95,7 +68,7 @@
     <footer class="p-4 bg-[#161b22] flex justify-end">
         <button
             class="bg-teal-700 hover:bg-teal-600 text-white text-sm font-bold py-2 px-4 rounded-md transition-colors shadow-sm"
-            onclick={saveSettings}
+            onclick={() => settings.save()}
         >
             Save Changes
         </button>

@@ -1,0 +1,21 @@
+import { ErrorResponseType } from "@defs/http";
+
+export class AppError extends Error {
+    constructor(
+        public message: string,
+        public statusCode: number = 400,
+        public code?: string,
+    ) {
+        super(message);
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
+
+    serialize(): ErrorResponseType {
+        return {
+            statusCode: this.statusCode,
+            error: this.code || this.name,
+            message: this.message,
+        };
+    }
+}
