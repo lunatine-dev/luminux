@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { fly } from "svelte/transition";
+    import { flip } from "svelte/animate";
+
     import { Button } from "$lib/components/ui/button";
     import { Card } from "$lib/components/ui/card";
     import { Badge } from "$lib/components/ui/badge";
@@ -14,6 +17,17 @@
     import IconPlayerPlay from "@tabler/icons-svelte/icons/player-play";
     import IconDownload from "@tabler/icons-svelte/icons/download";
     import IconTarget from "@tabler/icons-svelte/icons/target";
+
+    const eventTimeline = [
+        { time: 3.9, label: "Elimination", action: "Double_Kill" },
+        { time: 3.91, label: "Elimination", action: "Bounty_Killed" },
+        { time: 6.07, label: "Elimination", action: "Triple_Kill" },
+    ];
+
+    let time = $state(0);
+    const activeEvents = $derived(
+        eventTimeline.filter((e) => time >= e.time).slice(-3), // Only keep the most recent 3
+    );
 </script>
 
 <main class="max-w-350 mx-auto px-6 lg:px-12 pt-6 md:pt-20 pb-32 transition-colors duration-500">
@@ -63,33 +77,34 @@
             </div>
 
             <div class="relative w-full aspect-video overflow-hidden bg-zinc-50 dark:bg-zinc-900">
-                <div
-                    class="absolute bottom-8 left-8 z-20 flex items-center gap-4 px-4 py-2.5 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border border-border rounded-2xl shadow-2xl"
-                >
-                    <div class="flex items-center gap-2">
+                <div class="absolute bottom-6 left-6 z-20 flex flex-col-reverse gap-2 items-start">
+                    {#each activeEvents as event, i (event.time)}
                         <div
-                            class="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.5)]"
-                        ></div>
-                        <span class="text-[10px] font-black text-primary uppercase tracking-widest">OW2 Live Data</span>
-                    </div>
-                    <div class="h-4 w-px bg-border"></div>
-                    <p class="text-xs font-mono text-zinc-600 dark:text-zinc-300">
-                        <span class="text-foreground dark:text-white font-bold italic">Triple_Kill</span> detected
-                        <span class="text-zinc-400 px-1">→</span>
-                        <span class="text-primary italic">Momentum_HUD_Active</span>
-                    </p>
+                            animate:flip={{ duration: 300 }}
+                            transition:fly={{ x: -20, duration: 400, delay: i * 100 }}
+                            class="flex items-center gap-3 px-4 py-2 bg-zinc-950/80 backdrop-blur-md border border-white/10 rounded-full shadow-lg"
+                        >
+                            <div class="flex items-center gap-2">
+                                <div class="size-1.5 rounded-full bg-purple-500 animate-pulse"></div>
+                                <span class="text-[9px] font-bold text-purple-400 uppercase tracking-tighter"
+                                    >OW2 Live</span
+                                >
+                            </div>
+
+                            <div class="h-3 w-px bg-white/20"></div>
+
+                            <p class="text-[11px] font-mono whitespace-nowrap">
+                                <span class="text-white font-bold italic">{event.label}</span>
+                                <span class="text-zinc-500 mx-1">→</span>
+                                <span class="text-purple-400 italic">{event.action}</span>
+                            </p>
+                        </div>
+                    {/each}
                 </div>
 
-                <img
-                    src="/editor_light.webp"
-                    alt=""
-                    class="absolute inset-0 w-full h-full object-cover dark:hidden opacity-90 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <img
-                    src="/editor_dark.webp"
-                    alt=""
-                    class="absolute inset-0 w-full h-full object-cover hidden dark:block opacity-90 group-hover:opacity-100 transition-opacity duration-500"
-                />
+                <video bind:currentTime={time} autoplay muted loop playsinline class="w-full h-full object-cover">
+                    <source src="/videos/overlay.webm" type="video/webm" />
+                </video>
             </div>
         </Card>
     </div>
