@@ -20,7 +20,7 @@
 
     const scenes = {
         Bounties: {
-            video: "/videos/elims.webm",
+            video: "bounty.mp4",
             events: [
                 { time: 0.1, label: "Elimination", action: "Kill", context: "REIN" },
                 { time: 3.9, label: "Elimination", action: "Double_Kill", context: "You" },
@@ -29,17 +29,18 @@
             ],
         },
         "Hero Swaps": {
-            video: "/videos/elims.webm",
+            video: "change_hero.mp4",
             events: [
-                { time: 2.0, label: "Hero_Swap", action: "Switch_to_Tracer", context: "You" },
-                { time: 3.0, label: "Hero_Swap", action: "Switch_to_Genji", context: "AlreadyTracer" },
+                { time: 4.9, label: "Round_Start", action: "Lijiang", context: "Competitive" },
+                { time: 6.6, label: "Hero_Swap", action: "Switch_to_Ana", context: "You" },
             ],
         },
-        "Match Detection": {
-            video: "/videos/elims.webm",
+        "Outcome Detection": {
+            video: "loss.mp4",
             events: [
-                { time: 2.0, label: "Match_Start", action: "Ilios", context: "Competitive" },
-                { time: 3.0, label: "Round_Start", action: "Ilios", context: "Competitive" },
+                { time: 0.5, label: "Elimination", action: "Kill", context: "Crisman300" },
+                { time: 5, label: "Round_End", action: "Lijiang", context: "Competitive" },
+                { time: 5.1, label: "Outcome", action: "Defeat", context: "Competitive" },
             ],
         },
     };
@@ -101,7 +102,7 @@
                     <div class="size-3 rounded-full bg-[#27c93f]"></div>
                 </div>
 
-                <div class="hidden md:flex gap-4 ml-16">
+                <div class="flex gap-4 ml-1 md:ml-16">
                     {#each Object.keys(scenes) as tab}
                         <button
                             onclick={() => (activeTab = tab)}
@@ -158,7 +159,7 @@
 
                 <video
                     bind:currentTime={time}
-                    src={currentScene.video}
+                    src={"/videos/examples/" + currentScene.video}
                     autoplay
                     muted
                     loop
