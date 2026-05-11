@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType, Types } from "mongoose";
+import { Schema, model, InferSchemaType } from "mongoose";
 import { BaseDoc } from "@defs/database";
 
 const subscriptionSchema = new Schema(
