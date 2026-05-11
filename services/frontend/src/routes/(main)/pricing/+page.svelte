@@ -103,7 +103,7 @@
     {/each}
 </div>
 
-<div class="max-w-7xl mx-auto px-6 py-24 lg:py-32">
+<div class="max-w-7xl mx-auto px-6 py-6 md:py-20">
     <div class="text-center space-y-4 mb-20">
         <Badge variant="outline" class="border-primary/50 text-primary px-4 py-1">Pricing Plans</Badge>
         <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tight">

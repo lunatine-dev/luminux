@@ -81,7 +81,7 @@
     };
 </script>
 
-<div class="max-w-6xl mx-auto space-y-12 py-2 md:py-20">
+<div class="max-w-6xl mx-auto space-y-12 py-6 px-6 md:py-20">
     <div
         class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-8"
     >
