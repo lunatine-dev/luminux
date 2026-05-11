@@ -119,16 +119,15 @@
             {@const state = getButtonState(tier.id)}
             {@const Icon = tier.icon}
             <Card
-                class="relative p-8 flex flex-col h-full transition-all duration-500 {tier.featured
-                    ? 'border-primary shadow-[0_0_40px_rgba(var(--primary),0.15)] scale-105 z-10'
-                    : 'bg-background/50 border-border hover:border-primary/30'}
-                    {currentTier === tier.id ? 'ring-2 ring-primary ring-offset-4 ring-offset-background' : ''}"
+                class="relative p-8 flex flex-col h-full transition-all duration-500 {currentTier === tier.id
+                    ? 'border-primary shadow-[0_0_40px_rgba(var(--primary),0.15)] scale-105 z-10 bg-slate-300/50 dark:bg-none'
+                    : 'bg-background/50 border-border hover:border-primary/30'}"
             >
-                {#if tier.featured}
+                {#if currentTier === tier.id}
                     <div
                         class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg"
                     >
-                        Most Popular
+                        Current Plan
                     </div>
                 {/if}
 

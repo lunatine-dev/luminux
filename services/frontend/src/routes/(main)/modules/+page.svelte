@@ -82,18 +82,24 @@
 </script>
 
 <div class="max-w-6xl mx-auto space-y-12 py-2 md:py-20">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border pb-8">
+    <div
+        class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-8"
+    >
         <div class="space-y-1">
-            <h1 class="text-4xl font-black italic uppercase tracking-tighter text-foreground">Modules</h1>
-            <p class="text-muted-foreground font-medium">Power up your broadcast with engine-level precision.</p>
+            <h1 class="text-4xl font-black italic uppercase tracking-tighter text-zinc-900 dark:text-zinc-100">
+                Modules
+            </h1>
+            <p class="text-zinc-500 dark:text-zinc-400 font-medium">
+                Power up your broadcast with engine-level precision.
+            </p>
         </div>
 
         <div class="relative w-full md:w-80">
-            <IconSearch class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
+            <IconSearch class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 dark:text-zinc-500" />
             <Input
                 placeholder="Search features..."
                 bind:value={searchQuery}
-                class="pl-10 h-12 rounded-2xl bg-zinc-900/50 border-zinc-800 focus:ring-primary/20"
+                class="pl-10 h-12 rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20"
             />
         </div>
     </div>
@@ -103,20 +109,20 @@
             {@const locked = isLocked(module.tier)}
             {@const Icon = module.icon}
             <Card
-                class="group relative flex flex-col justify-between overflow-hidden border-zinc-800 bg-zinc-950 p-0 transition-all duration-300 hover:border-primary/50"
+                class="group relative flex flex-col justify-between overflow-hidden border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 transition-all duration-300 hover:border-primary/50"
             >
                 <div class="p-6 space-y-4">
                     <div class="flex justify-between items-start">
                         <div
-                            class="size-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center transition-colors group-hover:bg-primary/10 group-hover:border-primary/20"
+                            class="size-12 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center transition-colors group-hover:bg-primary/10 group-hover:border-primary/20"
                         >
-                            <Icon class="size-6 text-zinc-400 group-hover:text-primary" />
+                            <Icon class="size-6 text-zinc-500 dark:text-zinc-400 group-hover:text-primary" />
                         </div>
 
                         {#if locked}
                             <Badge
                                 variant="outline"
-                                class="bg-zinc-900 text-zinc-500 border-zinc-800 font-bold uppercase text-[9px] tracking-widest gap-1 px-2 py-0.5"
+                                class="bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border-zinc-200 dark:border-zinc-800 font-bold uppercase text-[9px] tracking-widest gap-1 px-2 py-0.5"
                             >
                                 <IconLock class="size-3" />
                                 {module.tier}
@@ -125,19 +131,19 @@
                     </div>
 
                     <div class="space-y-1.5">
-                        <h3 class="text-xl font-bold tracking-tight text-zinc-100 italic uppercase">
+                        <h3 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 italic uppercase">
                             {module.name}
                         </h3>
-                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
                             {module.description}
                         </p>
                     </div>
                 </div>
 
                 <div
-                    class="mt-auto px-6 py-4 bg-zinc-900/30 border-t border-zinc-900 flex items-center justify-between"
+                    class="mt-auto px-6 py-4 bg-zinc-50/50 dark:bg-zinc-900/30 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between"
                 >
-                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-600">
                         {module.category}
                     </span>
 
@@ -149,7 +155,11 @@
                             Unlock
                         </a>
                     {:else}
-                        <span class="text-[10px] font-black uppercase tracking-widest text-green-500/80"> Active </span>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-widest text-green-600 dark:text-green-500/80"
+                        >
+                            Active
+                        </span>
                     {/if}
                 </div>
             </Card>
