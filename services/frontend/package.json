@@ -17,6 +17,7 @@
         "@fontsource-variable/geist": "^5.2.8",
         "@internationalized/date": "^3.12.1",
         "@sveltejs/adapter-auto": "^7.0.1",
+        "@sveltejs/adapter-cloudflare": "^7.2.8",
         "@sveltejs/kit": "^2.59.1",
         "@sveltejs/vite-plugin-svelte": "^7.0.0",
         "@tabler/icons-svelte": "^3.44.0",

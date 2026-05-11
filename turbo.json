@@ -3,14 +3,11 @@
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": [".svelte-kit/**", "dist/**"]
+            "outputs": [".svelte-kit/**", "dist/**", "build/**"]
         },
         "dev": {
             "cache": false,
             "persistent": true
-        },
-        "sync:api": {
-            "cache": false
         }
     }
 }
