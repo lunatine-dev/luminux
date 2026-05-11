@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { fly } from "svelte/transition";
+    import { flip } from "svelte/animate";
+
     import { Button } from "$lib/components/ui/button";
     import { Card } from "$lib/components/ui/card";
     import { Badge } from "$lib/components/ui/badge";
@@ -14,6 +17,43 @@
     import IconPlayerPlay from "@tabler/icons-svelte/icons/player-play";
     import IconDownload from "@tabler/icons-svelte/icons/download";
     import IconTarget from "@tabler/icons-svelte/icons/target";
+
+    const scenes = {
+        Bounties: {
+            video: "/videos/elims.webm",
+            events: [
+                { time: 0.1, label: "Elimination", action: "Kill", context: "REIN" },
+                { time: 3.9, label: "Elimination", action: "Double_Kill", context: "You" },
+                { time: 3.91, label: "Elimination", action: "Bounty_Killed", context: "You" },
+                { time: 6.07, label: "Elimination", action: "Triple_Kill", context: "You" },
+            ],
+        },
+        "Hero Swaps": {
+            video: "/videos/elims.webm",
+            events: [
+                { time: 2.0, label: "Hero_Swap", action: "Switch_to_Tracer", context: "You" },
+                { time: 3.0, label: "Hero_Swap", action: "Switch_to_Genji", context: "AlreadyTracer" },
+            ],
+        },
+        "Match Detection": {
+            video: "/videos/elims.webm",
+            events: [
+                { time: 2.0, label: "Match_Start", action: "Ilios", context: "Competitive" },
+                { time: 3.0, label: "Round_Start", action: "Ilios", context: "Competitive" },
+            ],
+        },
+    };
+
+    let activeTab = $state<keyof typeof scenes>("Bounties");
+    let time = $state(0);
+    const currentScene = $derived(scenes[activeTab]);
+
+    const activeEvents = $derived(currentScene.events.filter((e) => time >= e.time).slice(-3));
+
+    $effect(() => {
+        activeTab;
+        time = 0;
+    });
 </script>
 
 <main class="max-w-350 mx-auto px-6 lg:px-12 pt-6 md:pt-20 pb-32 transition-colors duration-500">
@@ -50,46 +90,83 @@
         ></div>
 
         <Card
-            class="p-0 relative gap-0 overflow-hidden rounded-[2.5rem] border border-border bg-white dark:bg-zinc-950 shadow-2xl flex flex-col pt-0 transition-all duration-500"
+            class="p-0 relative overflow-hidden rounded-[2.5rem] border border-border bg-white dark:bg-zinc-950 shadow-2xl flex flex-col pt-0 gap-0"
         >
             <div
-                class="w-full h-11 shrink-0 bg-zinc-100/80 dark:bg-zinc-900/90 flex items-center px-6 gap-2 border-b border-border relative z-30 mb-0"
+                class="w-full h-11 shrink-0 bg-zinc-100/80 dark:bg-zinc-900/90 flex items-center px-6 gap-2 border-b border-border z-30"
             >
                 <div class="flex gap-2">
                     <div class="size-3 rounded-full bg-[#ff5f56]"></div>
                     <div class="size-3 rounded-full bg-[#ffbd2e]"></div>
                     <div class="size-3 rounded-full bg-[#27c93f]"></div>
                 </div>
+
+                <div class="hidden md:flex gap-4 ml-16">
+                    {#each Object.keys(scenes) as tab}
+                        <button
+                            onclick={() => (activeTab = tab)}
+                            class="text-[10px] font-black uppercase tracking-widest transition-colors {activeTab === tab
+                                ? 'text-primary'
+                                : 'text-zinc-500 hover:text-zinc-400'}"
+                        >
+                            {tab}
+                        </button>
+                    {/each}
+                </div>
             </div>
 
-            <div class="relative w-full aspect-video overflow-hidden bg-zinc-50 dark:bg-zinc-900">
-                <div
-                    class="absolute bottom-8 left-8 z-20 flex items-center gap-4 px-4 py-2.5 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border border-border rounded-2xl shadow-2xl"
-                >
-                    <div class="flex items-center gap-2">
+            <div class="relative w-full aspect-video overflow-hidden bg-zinc-900">
+                <div class="absolute bottom-6 left-6 z-20 flex-col-reverse gap-2 items-start hidden md:flex">
+                    {#each activeEvents as event (event.time + activeTab)}
                         <div
-                            class="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.5)]"
-                        ></div>
-                        <span class="text-[10px] font-black text-primary uppercase tracking-widest">OW2 Live Data</span>
-                    </div>
-                    <div class="h-4 w-px bg-border"></div>
-                    <p class="text-xs font-mono text-zinc-600 dark:text-zinc-300">
-                        <span class="text-foreground dark:text-white font-bold italic">Triple_Kill</span> detected
-                        <span class="text-zinc-400 px-1">→</span>
-                        <span class="text-primary italic">Momentum_HUD_Active</span>
-                    </p>
+                            animate:flip={{ duration: 300 }}
+                            transition:fly={{ x: -20, duration: 400 }}
+                            class="flex items-center gap-3 px-4 py-2 bg-zinc-950/80 backdrop-blur-md border border-white/10 rounded-full shadow-lg"
+                        >
+                            <div class="flex items-center gap-2">
+                                <div
+                                    class="size-1.5 rounded-full animate-pulse {event.context === 'You'
+                                        ? 'bg-yellow-400 shadow-[0_0_8px_#facc15]'
+                                        : 'bg-purple-500'}"
+                                ></div>
+
+                                <span
+                                    class="text-[9px] font-bold uppercase tracking-tighter {event.context === 'You'
+                                        ? 'text-yellow-400'
+                                        : 'text-purple-400'}"
+                                >
+                                    {event.context === "You" ? "Personal" : "OW2"}
+                                </span>
+                            </div>
+
+                            <div class="h-3 w-px bg-white/20"></div>
+
+                            <p class="text-[11px] font-mono whitespace-nowrap">
+                                {#if event.context && event.context !== "You"}
+                                    <span class="text-zinc-400 mr-1">[{event.context}]</span>
+                                {/if}
+
+                                <span class="text-white font-bold italic">{event.label}</span>
+                                <span class="text-zinc-500 mx-1">→</span>
+                                <span class="{event.context === 'You' ? 'text-yellow-400' : 'text-purple-400'} italic"
+                                    >{event.action}</span
+                                >
+                            </p>
+                        </div>
+                    {/each}
                 </div>
 
-                <img
-                    src="/editor_light.webp"
-                    alt=""
-                    class="absolute inset-0 w-full h-full object-cover dark:hidden opacity-90 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <img
-                    src="/editor_dark.webp"
-                    alt=""
-                    class="absolute inset-0 w-full h-full object-cover hidden dark:block opacity-90 group-hover:opacity-100 transition-opacity duration-500"
-                />
+                <video
+                    bind:currentTime={time}
+                    src={currentScene.video}
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    class="w-full h-full object-cover"
+                >
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </Card>
     </div>
