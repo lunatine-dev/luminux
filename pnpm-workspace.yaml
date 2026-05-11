@@ -1,8 +1,0 @@
-packages:
-    - services/*
-    - core/*
-
-onlyBuiltDependencies:
-    - "@tailwindcss/oxide"
-    - argon2
-    - esbuild
