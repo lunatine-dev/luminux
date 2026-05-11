@@ -1,14 +1,13 @@
-import { Schema, model, InferSchemaType, Types } from "mongoose";
+import { Schema, model, InferSchemaType } from "mongoose";
 import { adjectives, nouns, uniqueUsernameGenerator } from "unique-username-generator";
+import { BaseDoc } from "@defs/database";
 
 const userSchema = new Schema(
     {
         email: { type: String, unique: true, sparse: true, lowercase: true },
         email_verified: { type: Boolean, default: false },
         password: { type: String, select: false },
-
         role: { type: String, enum: ["user", "admin", "dev"], default: "user" },
-
         username: {
             type: String,
             unique: true,
@@ -38,13 +37,17 @@ const userSchema = new Schema(
                 lastSync: { type: Date, default: Date.now },
             },
         },
+
+        // Payment options
+        stripeCustomerId: { type: String, unique: true },
+        subscriptionStatus: { type: String, default: "free" },
+        activeSubscription: {
+            type: Schema.Types.ObjectId,
+            ref: "Subscription",
+        },
     },
     { timestamps: true },
 );
 
-export type User = InferSchemaType<typeof userSchema> & {
-    _id: Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type User = BaseDoc<InferSchemaType<typeof userSchema>>;
 export const UserModel = model<User>("User", userSchema);
