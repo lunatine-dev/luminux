@@ -120,7 +120,7 @@
             {@const Icon = tier.icon}
             <Card
                 class="relative p-8 flex flex-col h-full transition-all duration-500 {currentTier === tier.id
-                    ? 'border-primary shadow-[0_0_40px_rgba(var(--primary),0.15)] scale-105 z-10 bg-slate-300/50 dark:bg-none'
+                    ? 'border-primary shadow-[0_0_40px_rgba(var(--primary),0.15)] scale-105 z-10 bg-slate-300/50 dark:bg-zinc-950 outline outline-primary'
                     : 'bg-background/50 border-border hover:border-primary/30'}"
             >
                 {#if currentTier === tier.id}
