@@ -435,7 +435,7 @@ export interface paths {
                     /** @description The authorization code returned by Twitch */
                     code: string;
                     /** @description The state parameter to prevent CSRF */
-                    state?: string;
+                    state: string;
                 };
                 header?: never;
                 path?: never;

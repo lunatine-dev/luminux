@@ -55,6 +55,8 @@
         activeTab;
         time = 0;
     });
+
+    const { data } = $props();
 </script>
 
 <main class="max-w-350 mx-auto px-6 lg:px-12 pt-6 md:pt-20 pb-32 transition-colors duration-500">
