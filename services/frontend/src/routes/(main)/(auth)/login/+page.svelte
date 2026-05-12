@@ -1,7 +1,7 @@
 <script lang="ts">
     import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
-    import AuthLayout from "$lib/components/auth/Layout.svelte";
+    import AuthLayout from "$lib/components/Auth/AuthLayout.svelte";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { FieldGroup, Field, FieldLabel } from "$lib/components/ui/field";
@@ -11,7 +11,6 @@
     let password = $state("");
 
     async function handleLogin() {
-        // Your login logic / Fastify API call
         console.log("Logging in:", { email, password });
     }
 </script>

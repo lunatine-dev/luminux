@@ -1,5 +1,5 @@
 <script lang="ts">
-    import AuthLayout from "$lib/components/auth/Layout.svelte";
+    import AuthLayout from "$lib/components/Auth/AuthLayout.svelte";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { FieldGroup, Field, FieldLabel } from "$lib/components/ui/field";

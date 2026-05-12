@@ -2,7 +2,6 @@
     import Footer from "$lib/utils/footer";
     import Brand from "$lib/utils/brand";
 
-    import IconBolt from "@tabler/icons-svelte/icons/bolt";
     import IconBrandDiscord from "@tabler/icons-svelte/icons/brand-discord";
     import IconBrandGithub from "@tabler/icons-svelte/icons/brand-github";
     import IconHeart from "@tabler/icons-svelte/icons/heart";

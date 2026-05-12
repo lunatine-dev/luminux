@@ -13,21 +13,15 @@
     import Brand from "$lib/utils/brand";
     import Nav from "$lib/utils/nav";
 
-    import {
-        IconBolt,
-        IconSettings,
-        IconLayoutDashboard,
-        IconLogout,
-        IconBell,
-        IconSun,
-        IconMoon,
-        IconVideo,
-        IconChartBar,
-        IconDatabase,
-        IconLayersIntersect,
-        IconMenu2,
-    } from "@tabler/icons-svelte";
-    import { capitalizeFirstLetter } from "$lib/utils";
+    import IconSettings from "@tabler/icons-svelte/icons/settings";
+    import IconLayoutDashboard from "@tabler/icons-svelte/icons/layout-dashboard";
+    import IconLogout from "@tabler/icons-svelte/icons/logout";
+    import IconBell from "@tabler/icons-svelte/icons/bell";
+    import IconSun from "@tabler/icons-svelte/icons/sun";
+    import IconMoon from "@tabler/icons-svelte/icons/moon";
+    import IconVideo from "@tabler/icons-svelte/icons/video";
+    import IconDatabase from "@tabler/icons-svelte/icons/database";
+    import IconMenu2 from "@tabler/icons-svelte/icons/menu-2";
 
     const { isHidden = false, user = null } = $props();
 </script>
@@ -174,7 +168,7 @@
                                             variant="outline"
                                             class="text-[9px] uppercase font-black px-1.5 py-0 border-primary/30 text-primary"
                                         >
-                                            {capitalizeFirstLetter(user.subscription)}
+                                            {user.subscription}
                                         </Badge>
                                     </div>
 
