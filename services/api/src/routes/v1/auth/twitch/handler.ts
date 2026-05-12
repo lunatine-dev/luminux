@@ -9,9 +9,9 @@ import { saveTicket } from "@services/auth/ticket-manager";
 
 export const handlers = {
     callback: (async (request, reply) => {
-        const { token } = await request.server.twitchOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
-
         try {
+            const { token } = await request.server.twitchOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
+
             const {
                 dbUser,
                 sessionId,

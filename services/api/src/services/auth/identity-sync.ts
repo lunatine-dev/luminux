@@ -19,11 +19,12 @@ export const syncOAuthUser = async (params: {
                 [`${providerKey}.refreshToken`]: params.refreshToken,
                 [`${providerKey}.lastSync`]: new Date(),
                 lastLogin: new Date(),
-                ...(params.email && { email: params.email.toLowerCase() }),
             },
             $setOnInsert: {
                 ...(params.avatar && { avatar: params.avatar }),
                 ...(params.username && { username: params.username }),
+                ...(params.email && { email: params.email.toLowerCase() }),
+                ...(params.provider === "twitch" && params.email && { email_verified: true }),
             },
         },
         { upsert: true, returnDocument: "after", setDefaultOnInsert: true, runValidators: true },

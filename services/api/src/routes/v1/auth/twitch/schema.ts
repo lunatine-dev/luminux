@@ -8,11 +8,9 @@ export const TwitchCallbackQuery = Type.Object({
     code: Type.String({
         description: "The authorization code returned by Twitch",
     }),
-    state: Type.Optional(
-        Type.String({
-            description: "The state parameter to prevent CSRF",
-        }),
-    ),
+    state: Type.String({
+        description: "The state parameter to prevent CSRF",
+    }),
 });
 
 // --- Static Types for Handlers ---

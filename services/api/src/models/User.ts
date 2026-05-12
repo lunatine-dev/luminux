@@ -2,6 +2,23 @@ import { Schema, model, InferSchemaType } from "mongoose";
 import { adjectives, nouns, uniqueUsernameGenerator } from "unique-username-generator";
 import { BaseDoc } from "@defs/database";
 
+const twitchProfileSchema = new Schema(
+    {
+        login: String,
+        display_name: String,
+        type: String,
+        broadcaster_type: String,
+        description: String,
+        profile_image_url: String,
+        offline_image_url: String,
+        created_at: String,
+    },
+    {
+        _id: false,
+        strict: false,
+    },
+);
+
 const userSchema = new Schema(
     {
         email: { type: String, unique: true, sparse: true, lowercase: true },
@@ -23,16 +40,7 @@ const userSchema = new Schema(
         connections: {
             twitch: {
                 id: { type: String, index: true, unique: true },
-                profile: {
-                    login: String,
-                    display_name: String,
-                    type: String,
-                    broadcaster_type: String,
-                    description: String,
-                    profile_image_url: String,
-                    offline_image_url: String,
-                    created_at: String,
-                },
+                profile: twitchProfileSchema,
                 refreshToken: { type: String, select: false },
                 lastSync: { type: Date, default: Date.now },
             },
