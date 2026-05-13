@@ -8,11 +8,11 @@
         "minimum-overwolf-version": "0.170.0",
         "description": "Intergration with the Luminux website for in game live integration with various applications",
         "dock_button_title": "Luminux",
-        "icon": "logos/icon-hover.png",
-        "icon_gray": "logos/icon.png",
-        "launcher_icon": "logos/icon.ico",
-        "splash_image": "logos/icon.png",
-        "window_icon": "logos/icon.png"
+        "icon": "logos/luminux_256x256_v2.png",
+        "icon_gray": "logos/luminux_256x256_v2.png",
+        "launcher_icon": "logos/luminux_256x256.ico",
+        "splash_image": "logos/luminux_256x256_v2.png",
+        "window_icon": "logos/luminux_256x256_v2.png"
     },
 
     "permissions": ["GameInfo", "Tray"],

@@ -16,25 +16,30 @@
 </svelte:head>
 
 <main
-    class="flex flex-col h-screen bg-[#0f111a] text-[#e6edf3] border border-[#30363d] overflow-hidden select-none cursor-default rounded-lg"
+    class="flex flex-col h-screen bg-[#050505] text-[#f4f4f5] border border-white/5 overflow-hidden select-none rounded-lg"
 >
-    <!-- Header / Drag Region -->
-    <header class="flex items-center p-3 bg-[#161b22] border-b border-[#30363d] drag">
-        <img src="/logos/icon.png" alt="Luminux" class="w-5 h-5 mr-2 pointer-events-none" />
-        <h1 class="text-sm font-semibold grow">Luminux Settings</h1>
-        <button
-            class="no-drag text-xl text-gray-500 hover:text-white transition-colors px-2"
-            onclick={closeWindow}
-            aria-label="Close"
-        >
-            &times;
+    <!-- Solid Black Header -->
+    <header class="flex items-center px-4 py-3 bg-[#0a0a0a] border-b border-white/5 drag">
+        <img src="/logos/luminux_256x256_v2.png" alt="Luminux" class="w-5 h-5 mr-2" />
+        <h1 class="text-[11px] font-bold tracking-widest uppercase opacity-90 grow text-white">Luminux Settings</h1>
+        <button class="no-drag opacity-40 hover:opacity-100 transition-opacity" onclick={closeWindow}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+            >
         </button>
     </header>
 
-    <!-- Body -->
-    <section class="p-5 grow">
-        <div class="flex flex-col gap-2">
-            <label for="token" class="text-[10px] uppercase tracking-wider text-gray-500 font-bold">
+    <section class="p-6 grow flex flex-col gap-6">
+        <div class="space-y-3">
+            <label for="token" class="text-[10px] uppercase tracking-widest font-black text-white/40">
                 Luminux API Token
             </label>
 
@@ -43,31 +48,40 @@
                 id="token"
                 bind:value={settings.token}
                 placeholder="lnx-xxxxxxxxxxxx"
-                class="bg-[#0d1117] border border-[#30363d] p-2.5 rounded-md font-mono text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all select-text cursor-text"
+                class="w-full bg-[#111111] border border-white/10 p-3 rounded-md font-mono text-sm text-white focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-white/10"
             />
-            <div class="flex justify-between items-center mt-1">
-                <p class="text-[11px] text-gray-600">Enter your secret key.</p>
+
+            <div class="flex justify-between items-center">
+                <p class="text-[11px] text-white/30 italic">Required for match synchronization.</p>
                 <button
-                    type="button"
-                    class="no-drag text-[11px] text-blue-500 hover:text-blue-400 hover:underline transition-all bg-transparent border-none p-0 cursor-pointer"
+                    class="no-drag text-[11px] font-bold text-primary hover:brightness-125 transition-all"
                     onclick={() => overwolf.utils.openUrlInDefaultBrowser("https://luminux.app/dashboard")}
                 >
-                    Luminux Dashboard &nearrow;
+                    Get your Token &nearrow;
                 </button>
             </div>
         </div>
 
         {#if settings.status}
-            <p class="text-xs mt-4 text-center {settings.status.includes('enter') ? 'text-red-400' : 'text-green-400'}">
-                {settings.status}
-            </p>
+            <div
+                class="py-2 px-3 rounded-md bg-white/[0.03] border-l-2 {settings.status.includes('enter')
+                    ? 'border-red-500'
+                    : 'border-green-500'}"
+            >
+                <p
+                    class="text-[11px] font-bold uppercase tracking-tight {settings.status.includes('enter')
+                        ? 'text-red-400'
+                        : 'text-green-400'}"
+                >
+                    {settings.status}
+                </p>
+            </div>
         {/if}
     </section>
 
-    <!-- Footer -->
-    <footer class="p-4 bg-[#161b22] flex justify-end">
+    <footer class="p-5 bg-[#0a0a0a] flex justify-end border-t border-white/5">
         <button
-            class="bg-teal-700 hover:bg-teal-600 text-white text-sm font-bold py-2 px-4 rounded-md transition-colors shadow-sm"
+            class="bg-primary hover:brightness-125 active:scale-95 text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-md transition-all shadow-lg"
             onclick={() => settings.save()}
         >
             Save Changes
