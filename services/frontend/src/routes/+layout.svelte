@@ -10,9 +10,9 @@
     let { children } = $props();
 
     // prod timer
-    let targetDate = null;
+    let targetDate = new Date("10/31/2026");
 
-    let days = $state("--");
+    let days = $state("999");
     let hours = $state("--");
     let minutes = $state("--");
     let seconds = $state("--");
@@ -81,7 +81,7 @@
     <title>{metadata.title ? `${metadata.title} - ${Brand.name}` : Brand.name}</title>
 </svelte:head>
 
-{#if dev}
+{#if !dev}
     <ModeWatcher />
 
     <div class="text-slate-900 dark:text-slate-50 transition-colors duration-200">
@@ -109,24 +109,17 @@
                 <h1 class="mb-6 leading-[1.1] font-black text-[clamp(2.5rem,8vw,4.5rem)]">Coming Soon</h1>
             </section>
 
-            <!-- Countdown Section (Hardcoded without JS) -->
             <div class="mb-12 flex gap-8">
-                <div class="flex flex-col">
-                    <span class="font-bold tabular-nums text-4xl md:text-5xl">{days}</span>
-                    <label class="text-xs uppercase tracking-wider text-[#6b7280]">Days</label>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold tabular-nums text-4xl md:text-5xl">{hours}</span>
-                    <label class="text-xs uppercase tracking-wider text-[#6b7280]">Hours</label>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold tabular-nums text-4xl md:text-5xl">{minutes}</span>
-                    <label class="text-xs uppercase tracking-wider text-[#6b7280]">Mins</label>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold tabular-nums text-4xl md:text-5xl">{seconds}</span>
-                    <label class="text-xs uppercase tracking-wider text-[#6b7280]">Secs</label>
-                </div>
+                {#if Number(days) > 100}
+                    <p class="text-2xl font-medium tracking-tight text-white/90">Autumn 2026</p>
+                {:else}
+                    {#each [{ val: days, label: "Days" }, { val: hours, label: "Hours" }, { val: minutes, label: "Mins" }, { val: seconds, label: "Secs" }] as unit}
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold tabular-nums text-4xl md:text-5xl">{unit.val}</span>
+                            <label class="text-[10px] uppercase tracking-[0.2em] text-gray-500">{unit.label}</label>
+                        </div>
+                    {/each}
+                {/if}
             </div>
         </main>
 
