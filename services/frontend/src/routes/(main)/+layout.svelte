@@ -18,7 +18,7 @@
 </script>
 
 <div
-    class="min-h-screen bg-background text-foreground transition-colors duration-300 selection:bg-primary selection:text-primary-foreground font-sans"
+    class="min-h-screen bg-background text-foreground transition-colors duration-300 selection:bg-primary selection:text-primary-foreground font-sans overflow-x-hidden"
 >
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div class="absolute top-0 right-0 w-1/3 h-screen bg-primary/5 -skew-x-12 translate-x-32"></div>
