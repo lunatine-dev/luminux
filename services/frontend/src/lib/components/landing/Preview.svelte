@@ -3,7 +3,6 @@
     import { flip } from "svelte/animate";
 
     import { Card } from "$lib/components/ui/card";
-    import { Button } from "$lib/components/ui/button";
 
     const scenes = {
         Bounties: {

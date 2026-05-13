@@ -1,4 +1,3 @@
-import { AppError } from "@core/errors";
 import { LocalUserHandler } from "./schema";
 
 export const handlers = {
