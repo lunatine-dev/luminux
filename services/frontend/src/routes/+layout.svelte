@@ -81,7 +81,7 @@
     <title>{metadata.title ? `${metadata.title} - ${Brand.name}` : Brand.name}</title>
 </svelte:head>
 
-{#if !dev}
+{#if dev}
     <ModeWatcher />
 
     <div class="text-slate-900 dark:text-slate-50 transition-colors duration-200">
