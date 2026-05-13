@@ -1,8 +1,13 @@
 <script lang="ts">
-    import AuthLayout from "$lib/components/Auth/AuthLayout.svelte";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { FieldGroup, Field, FieldLabel } from "$lib/components/ui/field";
+
+    import { metadata } from "$lib/components/metadata.svelte";
+    metadata.setTitle("Sign up");
+
+    import AuthLayout from "$lib/components/auth/AuthLayout.svelte";
+
     import IconBrandTwitch from "@tabler/icons-svelte/icons/brand-twitch";
 
     let email = $state("");

@@ -124,8 +124,10 @@
 
             {#if !user}
                 <div class="flex items-center gap-2">
-                    <Button variant="ghost" class="font-bold hidden sm:flex">Log In</Button>
-                    <Button class="rounded-xl px-6 font-black shadow-lg shadow-primary/20">Get Started</Button>
+                    <Button variant="ghost" class="font-bold hidden sm:flex" href="/login">Log In</Button>
+                    <Button class="rounded-xl px-6 font-black shadow-lg shadow-primary/20" href="/signup">
+                        Get Started
+                    </Button>
                 </div>
             {:else}
                 <div class="flex items-center gap-2">

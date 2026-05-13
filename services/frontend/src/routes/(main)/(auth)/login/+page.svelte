@@ -1,10 +1,15 @@
 <script lang="ts">
     import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
-    import AuthLayout from "$lib/components/Auth/AuthLayout.svelte";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { FieldGroup, Field, FieldLabel } from "$lib/components/ui/field";
+
+    import { metadata } from "$lib/components/metadata.svelte";
+    metadata.setTitle("Login");
+
+    import AuthLayout from "$lib/components/auth/AuthLayout.svelte";
+
     import IconBrandTwitch from "@tabler/icons-svelte/icons/brand-twitch";
 
     let email = $state("");

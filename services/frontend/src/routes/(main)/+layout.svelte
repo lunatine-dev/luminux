@@ -1,16 +1,17 @@
 <script lang="ts">
+    import { fade } from "svelte/transition";
     import { page } from "$app/state";
 
     import { toggleMode } from "mode-watcher";
-
     import { Button } from "$lib/components/ui/button";
 
-    import Navbar from "$lib/components/Navigation/Navbar.svelte";
-    import Footer from "$lib/components/Navigation/Footer.svelte";
-    import { IconMoon, IconSun } from "@tabler/icons-svelte";
+    import Navbar from "$lib/components/navigation/Navbar.svelte";
+    import Footer from "$lib/components/navigation/Footer.svelte";
+
+    import IconMoon from "@tabler/icons-svelte/icons/moon";
+    import IconSun from "@tabler/icons-svelte/icons/sun";
 
     const FULL_PAGES = ["/login", "/signup"];
-
     let isHidden = $derived(FULL_PAGES.includes(page.url.pathname));
 
     let { children, data } = $props();
@@ -25,8 +26,13 @@
     </div>
 
     <Navbar {isHidden} user={data?.user} />
-
-    {@render children()}
+    <div class="page-container">
+        {#key page.url.pathname}
+            <div in:fade={{ duration: 200, delay: 150 }} out:fade={{ duration: 150 }} class="page-wrapper">
+                {@render children()}
+            </div>
+        {/key}
+    </div>
 
     <Footer {isHidden} />
 
@@ -47,3 +53,20 @@
         </div>
     {/if}
 </div>
+
+<style>
+    .page-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        /* Ensure the container doesn't collapse */
+        width: 100%;
+    }
+
+    .page-wrapper {
+        /* This is the magic: both pages sit in row 1, col 1 */
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+    }
+</style>
