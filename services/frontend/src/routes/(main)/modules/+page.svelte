@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { Button } from "$lib/components/ui/button";
     import { Card } from "$lib/components/ui/card";
     import { Badge } from "$lib/components/ui/badge";
     import { Input } from "$lib/components/ui/input";
+
+    import { metadata } from "$lib/components/metadata.svelte";
+    metadata.setTitle("Modules");
 
     import IconSearch from "@tabler/icons-svelte/icons/search";
     import IconLock from "@tabler/icons-svelte/icons/lock";

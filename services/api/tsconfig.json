@@ -16,7 +16,8 @@
             "@utils/*": ["./src/utils/*"],
             "@core/*": ["./src/core/*"],
             "@defs/*": ["./src/types/*"],
-            "@models/*": ["./src/models/*"]
+            "@models/*": ["./src/models/*"],
+            "@routes/*": ["./src/routes/*"]
         }
     },
     "include": ["src/**/*"]

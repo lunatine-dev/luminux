@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { Component } from "svelte";
     import { Badge } from "$lib/components/ui/badge";
 
     interface Props {
@@ -25,7 +24,6 @@
         {/if}
     </div>
 
-    <!-- The separator only renders if a label/icon was actually provided -->
     {#if Icon}
         <div class="h-3 w-px bg-border" aria-hidden="true"></div>
     {/if}

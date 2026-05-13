@@ -19,7 +19,11 @@ export const autoConfig = {
         },
         auth: oauth.TWITCH_CONFIGURATION,
     },
-    startRedirectPath: "/v1/oauth/twitch",
+    tokenRequestParams: {
+        client_id: process.env.TWITCH_CLIENT_ID,
+        client_secret: process.env.TWITCH_CLIENT_SECRET,
+    },
+    startRedirectPath: "/v1/auth/twitch",
     callbackUri: process.env.TWITCH_CALLBACK_URL,
 };
 

@@ -1,3 +1,6 @@
+import { User } from "@models/User";
+import { Session } from "@models/Session";
+
 import { Redis } from "ioredis";
 import { Connection } from "mongoose";
 
@@ -10,5 +13,9 @@ declare module "fastify" {
         mongoose: Connection;
         config: Env;
         twitchOAuth2: OAuth2Namespace;
+    }
+    interface FastifyRequest {
+        userDoc: User;
+        sessionDoc: Session;
     }
 }

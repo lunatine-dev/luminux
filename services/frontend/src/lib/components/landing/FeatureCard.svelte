@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type { Component } from "svelte";
-
     let {
         icon: Icon,
         title,

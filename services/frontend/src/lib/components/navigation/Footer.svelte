@@ -2,13 +2,17 @@
     import Footer from "$lib/utils/footer";
     import Brand from "$lib/utils/brand";
 
-    import IconBolt from "@tabler/icons-svelte/icons/bolt";
     import IconBrandDiscord from "@tabler/icons-svelte/icons/brand-discord";
     import IconBrandGithub from "@tabler/icons-svelte/icons/brand-github";
     import IconHeart from "@tabler/icons-svelte/icons/heart";
+
+    const { isHidden = false } = $props();
 </script>
 
-<footer class="w-full border-t border-border bg-white dark:bg-zinc-950 transition-colors duration-500">
+<footer
+    class="w-full border-t border-border bg-white dark:bg-zinc-950 transition-colors duration-500"
+    class:hidden={isHidden}
+>
     <div class="max-w-350 mx-auto px-6 lg:px-12 py-16">
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 lg:gap-8">
             <div class="col-span-2 lg:col-span-2 space-y-6">

@@ -13,32 +13,22 @@
     import Brand from "$lib/utils/brand";
     import Nav from "$lib/utils/nav";
 
-    import {
-        IconBolt,
-        IconSettings,
-        IconLayoutDashboard,
-        IconLogout,
-        IconBell,
-        IconSun,
-        IconMoon,
-        IconVideo,
-        IconChartBar,
-        IconDatabase,
-        IconLayersIntersect,
-        IconMenu2,
-    } from "@tabler/icons-svelte";
+    import IconSettings from "@tabler/icons-svelte/icons/settings";
+    import IconLayoutDashboard from "@tabler/icons-svelte/icons/layout-dashboard";
+    import IconLogout from "@tabler/icons-svelte/icons/logout";
+    import IconBell from "@tabler/icons-svelte/icons/bell";
+    import IconSun from "@tabler/icons-svelte/icons/sun";
+    import IconMoon from "@tabler/icons-svelte/icons/moon";
+    import IconVideo from "@tabler/icons-svelte/icons/video";
+    import IconDatabase from "@tabler/icons-svelte/icons/database";
+    import IconMenu2 from "@tabler/icons-svelte/icons/menu-2";
 
-    let isAuthenticated = $state(false);
-    let user = $state({
-        name: "John Doe",
-        initials: "JD",
-        tier: "Premium",
-        storageUsed: 65,
-    });
+    const { isHidden = false, user = null } = $props();
 </script>
 
 <nav
     class="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl transition-colors duration-500"
+    class:hidden={isHidden}
 >
     <div class="max-w-350 mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
         <div class="flex gap-4">
@@ -57,7 +47,7 @@
                     <nav class="flex flex-col gap-1 p-4">
                         {#each Nav.items as item}
                             {@const Icon = item.Icon}
-                            {#if !item.authenticated || isAuthenticated}
+                            {#if !item.authenticated || user}
                                 <a
                                     href={item.href}
                                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all
@@ -94,7 +84,7 @@
                 {@const isActive =
                     page.url.pathname === item.href || (page.url.pathname.startsWith(item.href) && item.href !== "/")}
 
-                {#if !item.authenticated || isAuthenticated}
+                {#if !item.authenticated || user}
                     <a
                         href={item.href}
                         class="group relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-200 ease-out
@@ -132,12 +122,12 @@
                 <span class="sr-only">Toggle theme</span>
             </Button>
 
-            {#if !isAuthenticated}
+            {#if !user}
                 <div class="flex items-center gap-2">
-                    <Button variant="ghost" class="font-bold hidden sm:flex" onclick={() => (isAuthenticated = true)}
-                        >Log In</Button
-                    >
-                    <Button class="rounded-xl px-6 font-black shadow-lg shadow-primary/20">Get Started</Button>
+                    <Button variant="ghost" class="font-bold hidden sm:flex" href="/login">Log In</Button>
+                    <Button class="rounded-xl px-6 font-black shadow-lg shadow-primary/20" href="/signup">
+                        Get Started
+                    </Button>
                 </div>
             {:else}
                 <div class="flex items-center gap-2">
@@ -159,10 +149,11 @@
                                 class="relative h-10 w-10 rounded-full p-0 ring-offset-background transition-all hover:ring-2 hover:ring-primary/20"
                             >
                                 <Avatar.Root class="h-10 w-10 border-2 border-border transition-colors">
+                                    <Avatar.Image src={user.avatar} />
                                     <Avatar.Fallback
                                         class="bg-secondary text-secondary-foreground font-black text-xs uppercase italic"
                                     >
-                                        {user.initials}
+                                        {user.username.charAt(0)}
                                     </Avatar.Fallback>
                                 </Avatar.Root>
                             </Button>
@@ -172,12 +163,15 @@
                             <DropdownMenu.Label class="font-normal p-2">
                                 <div class="flex flex-col space-y-2">
                                     <div class="flex items-center justify-between">
-                                        <p class="text-sm font-black uppercase italic tracking-tight">{user.name}</p>
+                                        <p class="text-sm font-black uppercase tracking-tight">
+                                            {user.username}
+                                        </p>
                                         <Badge
                                             variant="outline"
                                             class="text-[9px] uppercase font-black px-1.5 py-0 border-primary/30 text-primary"
-                                            >Premium</Badge
                                         >
+                                            {user.subscription}
+                                        </Badge>
                                     </div>
 
                                     <div class="space-y-1.5">
@@ -187,13 +181,10 @@
                                             <span class="flex items-center gap-1"
                                                 ><IconDatabase class="size-3" /> Storage</span
                                             >
-                                            <span>{user.storageUsed}%</span>
+                                            <span>0%</span>
                                         </div>
                                         <div class="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-                                            <div
-                                                class="h-full bg-primary rounded-full"
-                                                style="width: {user.storageUsed}%"
-                                            ></div>
+                                            <div class="h-full bg-primary rounded-full" style="width: 0%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -220,7 +211,6 @@
 
                             <DropdownMenu.Item
                                 class="cursor-pointer gap-3 p-2.5 font-bold text-destructive focus:text-destructive rounded-xl"
-                                onclick={() => (isAuthenticated = false)}
                             >
                                 <IconLogout class="size-4" />
                                 Log out
@@ -232,13 +222,3 @@
         </div>
     </div>
 </nav>
-
-<style>
-    /* Add this to your global CSS or a style tag */
-    .nav-item span {
-        display: inline-flex;
-        align-items: center;
-        line-height: 1; /* Prevents descenders from pushing the box up */
-        margin-bottom: 1px; /* Optical nudge */
-    }
-</style>

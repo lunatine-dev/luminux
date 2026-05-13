@@ -7,6 +7,7 @@ export const issueAccessToken = (user: User, sessionId: Types.ObjectId, jwt: Pic
         {
             sub: user._id.toString(),
             sid: sessionId.toString(),
+            subscription: user.subscriptionStatus,
             role: user.role,
             email_verified: user.email_verified,
             username: user.username,

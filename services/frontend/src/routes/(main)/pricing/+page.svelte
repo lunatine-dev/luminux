@@ -2,6 +2,10 @@
     import { Button } from "$lib/components/ui/button";
     import { Card } from "$lib/components/ui/card";
     import { Badge } from "$lib/components/ui/badge";
+
+    import { metadata } from "$lib/components/metadata.svelte";
+    metadata.setTitle("Pricing");
+
     import IconCheck from "@tabler/icons-svelte/icons/check";
     import IconX from "@tabler/icons-svelte/icons/x";
     import IconBolt from "@tabler/icons-svelte/icons/bolt";
