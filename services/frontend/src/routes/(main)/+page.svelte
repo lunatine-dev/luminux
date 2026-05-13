@@ -34,8 +34,9 @@
         </h1>
 
         <p class="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            The first reactive HUD built specifically for <span class="text-foreground font-semibold">Overwatch 2</span
-            >. Automate your hero-swaps, trigger kill-streak overlays, and archive every Team Wipe automatically.
+            A reactive HUD designed to bridge the gap between <span class="text-foreground font-semibold"
+                >Overwatch 2</span
+            > and your broadcast. Automate hero-swaps, trigger kill-streak overlays, and archive every Team Wipe in real-time.
         </p>
 
         <div class="flex flex-wrap gap-4 pt-4">

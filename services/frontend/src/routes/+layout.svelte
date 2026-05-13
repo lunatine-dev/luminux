@@ -70,8 +70,12 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://aphelion.sh" />
+    <meta property="og:url" content="https://luminux.app" />
     <meta property="og:image" content="/favicon/web-app-manifest-512x512.png" />
+    <meta
+        property="og:description"
+        content="Sync your Overwatch 2 stream with a reactive HUD. Automate hero-swaps, trigger kill-streak overlays, and archive every Team Wipe automatically."
+    />
     <meta property="og:title" content={metadata.title ? `${metadata.title} - ${Brand.name}` : Brand.name} />
 
     <title>{metadata.title ? `${metadata.title} - ${Brand.name}` : Brand.name}</title>
