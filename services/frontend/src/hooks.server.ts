@@ -29,6 +29,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             event.locals.user = jwt.verify(accessToken, JWT_SECRET) as User;
             return resolve(event);
         } catch (err) {
+            console.error(err);
             // Token expired
         }
     }
@@ -66,6 +67,7 @@ export const handle: Handle = async ({ event, resolve }) => {
                 clearAuth();
             }
         } catch (err) {
+            console.error(err);
             clearAuth();
         }
     }
