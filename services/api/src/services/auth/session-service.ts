@@ -63,7 +63,7 @@ export const rotateSession = async (rawOldToken: string, ip: string, userAgent: 
             await SessionModel.updateMany({ userId: historyCheck.userId }, { isValid: false });
         }
 
-        throw new AppError("Unauthorized", 401);
+        throw new AppError("Session could not be updated", 401);
     }
 
     return {

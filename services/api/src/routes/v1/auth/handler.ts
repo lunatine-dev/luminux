@@ -16,10 +16,10 @@ export const handlers = {
 
         try {
             const result = await rotateSession(refreshToken, realIp, realUserAgent);
-            if (!result.newRefreshToken) throw new AppError("Unauthorized", 401);
+            if (!result.newRefreshToken) throw new AppError("Could not rotate session", 401);
 
             const session = await SessionModel.findById(result.sessionId).populate("userId");
-            if (!session || !session.userId) throw new AppError("Unauthorized", 401);
+            if (!session || !session.userId) throw new AppError("Could not find valid session", 401);
 
             if (typeof session.userId === "string" || session.userId instanceof mongoose.Types.ObjectId)
                 throw new AppError("Something went wrong", 500);
