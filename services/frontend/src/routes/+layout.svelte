@@ -1,4 +1,5 @@
 <script>
+    import { page } from "$app/state";
     import { PUBLIC_DISCORD_URL } from "$env/static/public";
     import { dev } from "$app/environment";
     import "./layout.css";

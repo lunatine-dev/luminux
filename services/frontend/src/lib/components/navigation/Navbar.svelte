@@ -1,26 +1,18 @@
 <script lang="ts">
-    import { fade } from "svelte/transition";
     import { page } from "$app/state";
 
     import { toggleMode } from "mode-watcher";
 
-    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
     import { Button } from "$lib/components/ui/button";
     import * as Sheet from "$lib/components/ui/sheet/index.js";
-    import * as Avatar from "$lib/components/ui/avatar";
-    import { Badge } from "$lib/components/ui/badge";
 
     import Brand from "$lib/utils/brand";
     import Nav from "$lib/utils/nav";
+    import User from "$lib/components/navigation/User.svelte";
 
-    import IconSettings from "@tabler/icons-svelte/icons/settings";
-    import IconLayoutDashboard from "@tabler/icons-svelte/icons/layout-dashboard";
-    import IconLogout from "@tabler/icons-svelte/icons/logout";
-    import IconBell from "@tabler/icons-svelte/icons/bell";
+    import NavItem from "$lib/components/navigation/NavItem.svelte";
     import IconSun from "@tabler/icons-svelte/icons/sun";
     import IconMoon from "@tabler/icons-svelte/icons/moon";
-    import IconVideo from "@tabler/icons-svelte/icons/video";
-    import IconDatabase from "@tabler/icons-svelte/icons/database";
     import IconMenu2 from "@tabler/icons-svelte/icons/menu-2";
 
     const { isHidden = false, user = null } = $props();
@@ -80,36 +72,12 @@
 
         <nav class="hidden lg:flex items-center gap-2">
             {#each Nav.items as item}
+                {@const isVisible = !item.authenticated || user}
                 {@const Icon = item.Icon}
-                {@const isActive =
-                    page.url.pathname === item.href || (page.url.pathname.startsWith(item.href) && item.href !== "/")}
 
-                {#if !item.authenticated || user}
-                    <a
-                        href={item.href}
-                        class="group relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-200 ease-out
-                {isActive
-                            ? 'bg-secondary/40 text-primary dark:bg-zinc-800/60 dark:text-purple-400'
-                            : 'text-muted-foreground dark:text-zinc-400 hover:text-foreground dark:hover:text-zinc-100 hover:bg-secondary/50 dark:hover:bg-zinc-800/40'}"
-                    >
-                        {#if Icon}
-                            <div class="flex items-center justify-center size-5">
-                                <Icon class="size-4 stroke-[2px]" />
-                            </div>
-                        {/if}
-
-                        <span class="text-sm font-semibold tracking-wide">
-                            {item.label}
-                        </span>
-
-                        {#if isActive}
-                            <div
-                                class="absolute inset-0 border border-primary/10 dark:border-purple-500/10 rounded-lg -z-10"
-                                transition:fade={{ duration: 150 }}
-                            ></div>
-                        {/if}
-                    </a>
-                {/if}
+                <NavItem {isVisible} {Icon} href={item.href}>
+                    {item.label}
+                </NavItem>
             {/each}
         </nav>
 
@@ -130,94 +98,7 @@
                     </Button>
                 </div>
             {:else}
-                <div class="flex items-center gap-2">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        class="relative text-muted-foreground hover:text-primary rounded-full"
-                    >
-                        <IconBell class="size-5" />
-                        <span
-                            class="absolute top-2.5 right-2.5 size-2 bg-primary rounded-full border-2 border-background"
-                        ></span>
-                    </Button>
-
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                            <Button
-                                variant="ghost"
-                                class="relative h-10 w-10 rounded-full p-0 ring-offset-background transition-all hover:ring-2 hover:ring-primary/20"
-                            >
-                                <Avatar.Root class="h-10 w-10 border-2 border-border transition-colors">
-                                    <Avatar.Image src={user.avatar} />
-                                    <Avatar.Fallback
-                                        class="bg-secondary text-secondary-foreground font-black text-xs uppercase italic"
-                                    >
-                                        {user.username.charAt(0)}
-                                    </Avatar.Fallback>
-                                </Avatar.Root>
-                            </Button>
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Content class="w-64 mt-2 p-2 rounded-2xl" align="end">
-                            <DropdownMenu.Label class="font-normal p-2">
-                                <div class="flex flex-col space-y-2">
-                                    <div class="flex items-center justify-between">
-                                        <p class="text-sm font-black uppercase tracking-tight">
-                                            {user.username}
-                                        </p>
-                                        <Badge
-                                            variant="outline"
-                                            class="text-[9px] uppercase font-black px-1.5 py-0 border-primary/30 text-primary"
-                                        >
-                                            {user.subscription}
-                                        </Badge>
-                                    </div>
-
-                                    <div class="space-y-1.5">
-                                        <div
-                                            class="flex justify-between text-[10px] font-bold text-muted-foreground uppercase"
-                                        >
-                                            <span class="flex items-center gap-1"
-                                                ><IconDatabase class="size-3" /> Storage</span
-                                            >
-                                            <span>0%</span>
-                                        </div>
-                                        <div class="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-                                            <div class="h-full bg-primary rounded-full" style="width: 0%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </DropdownMenu.Label>
-
-                            <DropdownMenu.Separator class="my-2" />
-
-                            <DropdownMenu.Group>
-                                <DropdownMenu.Item class="cursor-pointer gap-3 p-2.5 font-bold rounded-xl">
-                                    <IconLayoutDashboard class="size-4 fill-primary" />
-                                    Studio
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Item class="cursor-pointer gap-3 p-2.5 font-bold rounded-xl">
-                                    <IconVideo class="size-4" />
-                                    VOD Archive
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Item class="cursor-pointer gap-3 p-2.5 font-bold rounded-xl">
-                                    <IconSettings class="size-4" />
-                                    Settings
-                                </DropdownMenu.Item>
-                            </DropdownMenu.Group>
-
-                            <DropdownMenu.Separator class="my-2" />
-
-                            <DropdownMenu.Item
-                                class="cursor-pointer gap-3 p-2.5 font-bold text-destructive focus:text-destructive rounded-xl"
-                            >
-                                <IconLogout class="size-4" />
-                                Log out
-                            </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
-                </div>
+                <User {user} />
             {/if}
         </div>
     </div>
