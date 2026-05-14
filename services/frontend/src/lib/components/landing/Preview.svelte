@@ -44,7 +44,7 @@
 </script>
 
 <div class="relative w-full mb-40 group">
-    <div class="flex items-center justify-center gap-2 w-full mb-5 z-10">
+    <div class="flex flex-wrap items-center justify-center gap-2 w-full mb-5 z-10">
         {#each Object.keys(scenes) as tab}
             <button
                 onclick={() => (activeTab = tab)}
@@ -63,7 +63,7 @@
         class="p-0 relative overflow-hidden rounded-[2.5rem] border border-border bg-white dark:bg-zinc-950 shadow-2xl flex flex-col pt-0 gap-0"
     >
         <div
-            class="w-full h-11 shrink-0 bg-zinc-100/80 dark:bg-zinc-900/90 flex items-center px-6 gap-2 border-b border-border z-30"
+            class="w-full h-11 shrink-0 bg-zinc-100/80 dark:bg-zinc-900/90 hidden md:flex items-center px-6 gap-2 border-b border-border z-30"
         >
             <div class="flex gap-2">
                 <div class="size-3 rounded-full bg-[#ff5f56]"></div>

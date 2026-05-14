@@ -26,7 +26,7 @@
         <div class="flex gap-4">
             <Sheet.Root>
                 <Sheet.Trigger class="p-2 -ml-2 rounded-md hover:bg-muted transition-colors">
-                    <IconMenu2 class="size-6 md:hidden" />
+                    <IconMenu2 class="size-6 lg:hidden" />
                 </Sheet.Trigger>
 
                 <Sheet.Content side="left" class="w-70 sm:w-87.5 px-0">
