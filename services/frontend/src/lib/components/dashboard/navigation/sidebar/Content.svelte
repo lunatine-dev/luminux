@@ -11,7 +11,15 @@
     let { user } = $props();
 
     const isLinkActive = (url: string) => {
-        return url === "/" ? page.url.pathname === "/studio" : page.url.pathname.startsWith(url);
+        if (url === "/home") return false;
+
+        const absoluteTargetPath = url === "/home" ? "/" : `/studio${url}`;
+
+        if (url === "/") {
+            return page.url.pathname === "/studio" || page.url.pathname === "/studio/";
+        }
+
+        return page.url.pathname.startsWith(absoluteTargetPath);
     };
 </script>
 
