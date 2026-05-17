@@ -17,5 +17,6 @@ declare module "fastify" {
     interface FastifyRequest {
         userDoc: User;
         sessionDoc: Session;
+        streamerId?: string;
     }
 }
