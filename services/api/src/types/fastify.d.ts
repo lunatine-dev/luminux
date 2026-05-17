@@ -13,6 +13,7 @@ declare module "fastify" {
         mongoose: Connection;
         config: Env;
         twitchOAuth2: OAuth2Namespace;
+        websocketServer: any;
     }
     interface FastifyRequest {
         userDoc: User;

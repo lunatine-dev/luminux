@@ -1,8 +1,16 @@
 import type { FastifyReply, FastifyRequest, FastifySchema, RouteHandler } from "fastify";
-import type { WebSocket as NodeWebSocket } from "ws";
+import type { WebSocket as FastifyUwsWebSocket } from "ws";
 import { Type, Static } from "typebox";
 import { ErrorResponse, ErrorResponseType, RedirectResponse, RedirectResponseType, StandardReply } from "@defs/http";
 import { SWAGGER_TAGS } from "@constants/swagger-tags";
+
+export interface UwsWebSocket extends FastifyUwsWebSocket {
+    subscribe(topic: string | Buffer): void;
+    publish(topic: string | Buffer, message: string | Buffer, isBinary?: boolean, compress?: boolean): void;
+    unsubscribe(topic: string | Buffer): void;
+    isSubscribed(topic: string | Buffer): boolean;
+    getTopics(): string[];
+}
 
 // --- Shared Body Definitions ---
 export const WebsocketQuery = Type.Object({
@@ -46,12 +54,14 @@ export type WebsocketValidationHandler = (
     request: FastifyRequest<{ Querystring: WebsocketQueryType }>,
     reply: FastifyReply,
 ) => void | Promise<void>;
+
 export type WebsocketHandler = (
-    socket: NodeWebSocket,
-    request: FastifyRequest<{ Querystring: WebsocketQueryType }>,
+    socket: UwsWebSocket,
+    request: FastifyRequest<{ Querystring: WebsocketQueryType }> & { socketUserId?: string },
 ) => void | Promise<void>;
+
 export type WebsocketEventFn<T = any> = (
-    socket: NodeWebSocket,
-    request: FastifyRequest<{ Querystring: WebsocketQueryType }>,
+    socket: UwsWebSocket,
+    request: FastifyRequest<{ Querystring: WebsocketQueryType }> & { socketUserId?: string },
     data: T,
 ) => void | Promise<void>;
