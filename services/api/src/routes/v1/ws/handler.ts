@@ -1,17 +1,9 @@
 import { InboundFrame, WebsocketHandler, WebsocketValidationHandler } from "@routes/v1/ws/schema";
 import { API_KEY_PREFIX } from "@constants/security";
-import { PATTERNS } from "@subscriptions/patterns";
-import { getEventHandler, isEventAllowed } from "./events";
-
-const getSubscriptionTopics = (userId: string, type: string): string[] => {
-    const topics: string[] = [];
-
-    topics.push(PATTERNS.overwatch.replace("*", userId));
-
-    return topics;
-};
+import { getEventHandler, getUserSubscriptionTopics, isEventAllowed } from "./events";
 
 const extractUserIdFromKey = async (key: string, type: string): Promise<string> => {
+    // TODO: User ID extraction
     if (type === "OVERLAY" && key.startsWith(`${API_KEY_PREFIX}_ovl`)) {
     }
     if (type === "OVERWOLF" && key.startsWith(`${API_KEY_PREFIX}_ow`)) {
@@ -35,7 +27,7 @@ export const handlers = {
 
         request.log.info(`New ${type} streaming pipeline initialized`);
 
-        const topics = getSubscriptionTopics(userId, type);
+        const topics = getUserSubscriptionTopics(userId, type);
         topics.forEach((topic) => socket.subscribe(topic));
 
         socket.on("message", async (rawData) => {
@@ -69,7 +61,6 @@ export const handlers = {
         });
 
         socket.on("close", () => {
-            socket.unsubscribe(PATTERNS.overwatch.replace("*", userId));
             request.log.info(`WebSocket tunnel closed for ${type}.`);
         });
     }) satisfies WebsocketHandler,
