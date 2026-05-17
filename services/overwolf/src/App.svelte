@@ -55,7 +55,8 @@
                 <p class="text-[11px] text-white/30 italic">Required for match synchronization.</p>
                 <button
                     class="no-drag text-[11px] font-bold text-primary hover:brightness-125 transition-all"
-                    onclick={() => overwolf.utils.openUrlInDefaultBrowser("https://luminux.app/dashboard")}
+                    onclick={() =>
+                        overwolf.utils.openUrlInDefaultBrowser("https://luminux.app/studio/integrations?type=overwolf")}
                 >
                     Get your Token &nearrow;
                 </button>
