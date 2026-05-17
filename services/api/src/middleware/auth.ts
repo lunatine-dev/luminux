@@ -1,9 +1,8 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-
+import type { onRequestHookHandler } from "fastify";
 import { Session, SessionModel } from "@models/Session";
 import { User } from "@models/User";
 
-export const isAuthenticated = async (request: FastifyRequest, reply: FastifyReply) => {
+export const isAuthenticated: onRequestHookHandler = async (request, reply) => {
     try {
         await request.jwtVerify();
     } catch (e) {

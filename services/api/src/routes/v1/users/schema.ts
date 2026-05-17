@@ -17,12 +17,26 @@ export const LocalUserSuccessResponse = Type.Object(
         $id: "LocalUser",
     },
 );
+export const TokenResponse = Type.Object({
+    overwolf: Type.String(),
+    overlay: Type.String(),
+});
+export const TokenRegenerateResponse = Type.Object({
+    success: Type.Boolean(),
+    key: Type.String(),
+});
+export const TokenRegenerateBody = Type.Object({
+    target: Type.Enum(["overwolf", "overlay"]),
+});
 
 // --- Static Types for Handlers ---
 export type LocalUserSuccessResponseType = Static<typeof LocalUserSuccessResponse>;
+export type TokenResponseType = Static<typeof TokenResponse>;
+export type TokenRegenerateResponseType = Static<typeof TokenRegenerateResponse>;
+export type TokenRegenerateBodyType = Static<typeof TokenRegenerateBody>;
 
 // --- Schemas ---
-export const Schemas = {
+export const Schemas: Record<string, FastifySchema> = {
     LocalUser: {
         tags: [SWAGGER_TAGS.USER],
         summary: "Fetch logged in user information",
@@ -31,10 +45,38 @@ export const Schemas = {
             200: LocalUserSuccessResponse,
             401: ErrorResponse,
         },
-    } satisfies FastifySchema,
+    },
+    Tokens: {
+        tags: [SWAGGER_TAGS.USER],
+        summary: "Fetches API tokens for logged in user",
+        security: [...SECURITY],
+        response: {
+            200: TokenResponse,
+            401: ErrorResponse,
+            404: ErrorResponse,
+        },
+    },
+    TokenRegenerate: {
+        tags: [SWAGGER_TAGS.USER],
+        summary: "Regenerates API token",
+        body: TokenRegenerateBody,
+        security: [...SECURITY],
+        response: {
+            200: TokenRegenerateResponse,
+            401: ErrorResponse,
+            500: ErrorResponse,
+        },
+    },
 };
 
 // --- Handler Types ---
 export type LocalUserHandler = RouteHandler<{
     Reply: StandardReply<LocalUserSuccessResponseType>;
+}>;
+export type TokenHandler = RouteHandler<{
+    Reply: StandardReply<TokenResponseType>;
+}>;
+export type TokenRegenerateHandler = RouteHandler<{
+    Body: TokenRegenerateBodyType;
+    Reply: StandardReply<TokenRegenerateResponseType>;
 }>;

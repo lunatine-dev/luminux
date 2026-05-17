@@ -11,6 +11,7 @@
         "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
     },
     "devDependencies": {
+        "@fastify/type-provider-typebox": "^6.1.0",
         "@overwolf/types": "^3.24.10",
         "@sveltejs/vite-plugin-svelte": "^7.0.0",
         "@tailwindcss/vite": "^4.2.2",

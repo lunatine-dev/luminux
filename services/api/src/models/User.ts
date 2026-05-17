@@ -1,6 +1,7 @@
 import { Schema, model, InferSchemaType } from "mongoose";
 import { adjectives, nouns, uniqueUsernameGenerator } from "unique-username-generator";
 import { BaseDoc } from "@defs/database";
+import { generateAPIToken } from "@services/api-tokens";
 
 const twitchProfileSchema = new Schema(
     {
@@ -39,7 +40,7 @@ const userSchema = new Schema(
 
         connections: {
             twitch: {
-                id: { type: String, index: true, unique: true },
+                id: { type: String, index: true, unique: true, sparse: true },
                 profile: twitchProfileSchema,
                 refreshToken: { type: String, select: false },
                 lastSync: { type: Date, default: Date.now },
@@ -47,11 +48,29 @@ const userSchema = new Schema(
         },
 
         // Payment options
-        stripeCustomerId: { type: String, unique: true },
+        stripeCustomerId: { type: String, unique: true, sparse: true },
         subscriptionStatus: { type: String, default: "free" },
         activeSubscription: {
             type: Schema.Types.ObjectId,
             ref: "Subscription",
+        },
+
+        // api
+        apiKeys: {
+            overwolf: {
+                type: String,
+                unique: true,
+                index: true,
+                select: false,
+                default: () => generateAPIToken("ow"),
+            },
+            overlay: {
+                type: String,
+                unique: true,
+                index: true,
+                select: false,
+                default: () => generateAPIToken("ovl"),
+            },
         },
     },
     { timestamps: true },
