@@ -2,6 +2,7 @@ export const SWAGGER_TAGS = {
     SYSTEM: "System",
     AUTH: "Auth",
     USER: "User",
+    WS: "Websocket",
 } as const;
 
 export const TAG_METADATA = [
@@ -10,6 +11,10 @@ export const TAG_METADATA = [
     {
         name: SWAGGER_TAGS.USER,
         description: "User profile and management",
+    },
+    {
+        name: SWAGGER_TAGS.WS,
+        description: "Websocket server",
     },
 ];
 
