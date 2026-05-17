@@ -43,6 +43,10 @@ class LuminuxCore {
         if (info.type === "info_update") {
             log(info, "info_event");
         }
+
+        if (this.socket) {
+            this.socket.sendEvent("match:telemetry", info);
+        }
     }
 
     onSocketMessage(data) {
@@ -69,29 +73,23 @@ class LuminuxCore {
         this.token = newToken;
         localStorage.setItem("luminux_api_token", newToken);
 
-        if (this.socket) {
-            this.socket.auth.token = newToken;
-            this.socket.disconnect().connect();
-        } else {
-            this.start();
-        }
+        this.restart();
     }
 
     async start() {
-        if (!this.token || this.isRunning) return;
+        if (!this.token || this.isConnecting || this.isRunning) return;
 
+        this.isConnecting = true;
         this.socket = registerSockets(this);
-        this.isRunning = true;
-
-        log("Luminux active.");
     }
 
     stop() {
+        this.isConnecting = false;
+        this.isRunning = false;
         if (this.socket) {
             this.socket.disconnect();
             this.socket = null;
         }
-        this.isRunning = false;
         log("Luminux offline.");
     }
 
