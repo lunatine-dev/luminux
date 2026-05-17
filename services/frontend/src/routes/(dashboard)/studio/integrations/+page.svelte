@@ -13,8 +13,18 @@
     import IconEyeOff from "@tabler/icons-svelte/icons/eye-off";
     import IconDownload from "@tabler/icons-svelte/icons/download";
     import IconRefresh from "@tabler/icons-svelte/icons/refresh";
+    import Tabs from "$lib/components/dashboard/navigation/Tabs.svelte";
 
-    let currentType = $derived(page.url.searchParams.get("type") || "overwolf");
+    let currentType = $state(page.url.searchParams.get("type") || "overwolf");
+    const integrationTabs = [
+        { id: "overwolf", label: "Overwolf Desktop App", href: "/studio/integrations?type=overwolf" },
+    ];
+    $effect(() => {
+        const urlParam = page.url.searchParams.get("type");
+        if (urlParam && urlParam !== currentType) {
+            currentType = urlParam;
+        }
+    });
 
     let showToken = $state(false);
     let isCopied = $state(false);
@@ -55,16 +65,7 @@
 
 <Page title="Integrations" blank={true}>
     <div class="grid h-full w-full grid-cols-1 gap-6 p-6 lg:grid-cols-3 transition-colors duration-200">
-        <div class="lg:col-span-3 flex border-b border-zinc-200/60 dark:border-zinc-800/80 gap-6">
-            <a
-                href="/studio/integrations?type=overwolf"
-                class="pb-3 text-sm font-semibold transition-all border-b-2 relative -mb-0.5 {currentType === 'overwolf'
-                    ? 'text-primary border-primary'
-                    : 'text-zinc-400 border-transparent hover:text-zinc-600 dark:hover:text-zinc-300'}"
-            >
-                Overwolf Desktop App
-            </a>
-        </div>
+        <Tabs items={integrationTabs} bind:active={currentType} />
         {#if currentType === "overwolf"}
             <div class="space-y-6 lg:col-span-1">
                 <div
