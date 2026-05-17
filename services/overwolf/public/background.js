@@ -1,6 +1,7 @@
 import { registerTray } from "./scripts/tray.js";
 import { registerSockets } from "./scripts/sockets.js";
 import { registerEvents } from "./scripts/game-events.js";
+import { routeGameTelemetry } from "./scripts/games/index.js";
 
 const log = (data, type = "background") => console.log(`[${type.toUpperCase()}]:`, data);
 
@@ -10,6 +11,7 @@ class LuminuxCore {
         this.token = localStorage.getItem("luminux_api_token") || "";
         this.isRunning = false;
         this.socket = null;
+        this.currentGameId = null;
 
         log("Initiating Luminux Core...");
 
@@ -27,31 +29,17 @@ class LuminuxCore {
     /**
      * Listeners
      */
-    onGameEvent(info) {
-        if (info.type === "event_fired") {
-            const events = info.data.events;
+    onGameEvent = (info, gameId) => {
+        this.currentGameId = gameId;
 
-            for (const event of events) {
-                let parsedData = event.data;
-                try {
-                    parsedData = JSON.parse(event.data);
-                } catch (e) {}
+        if (!this.socket || !this.isRunning) return;
 
-                console.log(`[EVENT]: ${event.name}`, parsedData);
-            }
-        }
-        if (info.type === "info_update") {
-            log(info, "info_event");
-        }
+        routeGameTelemetry(this.currentGameId, info, this.socket);
+    };
 
-        if (this.socket) {
-            this.socket.sendEvent("match:telemetry", info);
-        }
-    }
-
-    onSocketMessage(data) {
+    onSocketMessage = (data) => {
         log(`Processing Socket Signal: ${JSON.stringify(data)}`);
-    }
+    };
 
     /**
      * UI Actions
@@ -68,22 +56,22 @@ class LuminuxCore {
     /**
      * Core Lifecycle
      */
-    updateToken(newToken) {
+    updateToken = (newToken) => {
         log("Token updated. Synchronizing services...");
         this.token = newToken;
         localStorage.setItem("luminux_api_token", newToken);
 
         this.restart();
-    }
+    };
 
-    async start() {
+    start = async () => {
         if (!this.token || this.isConnecting || this.isRunning) return;
 
         this.isConnecting = true;
         this.socket = registerSockets(this);
-    }
+    };
 
-    stop() {
+    stop = () => {
         this.isConnecting = false;
         this.isRunning = false;
         if (this.socket) {
@@ -91,12 +79,12 @@ class LuminuxCore {
             this.socket = null;
         }
         log("Luminux offline.");
-    }
+    };
 
-    restart() {
+    restart = () => {
         this.stop();
         this.start();
-    }
+    };
 }
 
 const luminux = new LuminuxCore();

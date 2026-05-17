@@ -1,58 +1,67 @@
-import { g_interestedInFeatures } from "./constants.js";
-
-const isOverwatch = (id) => Math.floor(id / 10) === 10844;
+import { isGameSupported, getGameName, getGameFeatures } from "./games/index.js";
 
 export function registerEvents(core) {
-    const onInfoUpdates2Listener = (info) => {
-        core.onGameEvent({ type: "info_update", data: info });
-    };
-
-    const onNewEventsListener = (info) => {
-        core.onGameEvent({ type: "event_fired", data: info });
-    };
+    let activeInfoListener = null;
+    let activeEventListener = null;
 
     const onErrorListener = (info) => {
-        console.error("[GEP]: Error", info);
+        console.error("[GEP]: Error encountered:", info);
     };
 
-    const setFeatures = () => {
-        overwolf.games.events.setRequiredFeatures(g_interestedInFeatures, (info) => {
+    const setFeatures = (features) => {
+        if (!features || features.length === 0) {
+            console.warn("[GEP]: Aborting registration, empty feature list provided.");
+            return;
+        }
+
+        overwolf.games.events.setRequiredFeatures(features, (info) => {
             if (info.status === "error") {
-                console.warn("[GEP]: Retrying features in 2s...", info.reason);
-                window.setTimeout(setFeatures, 2000);
+                console.warn("[GEP]: Retrying feature configuration in 2s...", info.reason);
+                window.setTimeout(() => setFeatures(features), 2000);
                 return;
             }
-            console.log("[GEP]: Features set successfully", info);
+            console.log("[GEP]: Game features registered successfully:", info);
         });
     };
 
-    const startGEP = () => {
+    const startGEP = (gameId) => {
+        // 1. Clean up old handles explicitly
         overwolf.games.events.onError.removeListener(onErrorListener);
-        overwolf.games.events.onInfoUpdates2.removeListener(onInfoUpdates2Listener);
-        overwolf.games.events.onNewEvents.removeListener(onNewEventsListener);
+        if (activeInfoListener) overwolf.games.events.onInfoUpdates2.removeListener(activeInfoListener);
+        if (activeEventListener) overwolf.games.events.onNewEvents.removeListener(activeEventListener);
+
+        activeInfoListener = (info) => {
+            core.onGameEvent({ type: "info_update", data: info }, gameId);
+        };
+
+        activeEventListener = (info) => {
+            core.onGameEvent({ type: "event_fired", data: info }, gameId);
+        };
 
         overwolf.games.events.onError.addListener(onErrorListener);
-        overwolf.games.events.onInfoUpdates2.addListener(onInfoUpdates2Listener);
-        overwolf.games.events.onNewEvents.addListener(onNewEventsListener);
+        overwolf.games.events.onInfoUpdates2.addListener(activeInfoListener);
+        overwolf.games.events.onNewEvents.addListener(activeEventListener);
 
-        setFeatures();
+        const features = getGameFeatures(gameId);
+        setFeatures(features);
     };
 
+    // Game lifecycle orchestrators
     overwolf.games.onGameInfoUpdated.addListener((res) => {
-        if (res && res.gameInfo && isOverwatch(res.gameInfo.id)) {
+        if (res && res.gameInfo && isGameSupported(res.gameInfo.id)) {
             if (res.runningChanged || res.gameChanged) {
                 if (res.gameInfo.isRunning) {
-                    console.log("[GEP]: Overwatch Detected (Update)");
-                    startGEP();
+                    console.log(`[GEP]: Supported Game Detected (${getGameName(res.gameInfo.id)})`);
+                    startGEP(res.gameInfo.id);
                 }
             }
         }
     });
 
     overwolf.games.getRunningGameInfo((res) => {
-        if (res && res.isRunning && isOverwatch(res.id)) {
-            console.log("[GEP]: Overwatch Detected (Boot)");
-            startGEP();
+        if (res && res.isRunning && isGameSupported(res.id)) {
+            console.log(`[GEP]: Supported Game Detected on Boot (${getGameName(res.id)})`);
+            startGEP(res.id);
         }
     });
 }
