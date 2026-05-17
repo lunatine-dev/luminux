@@ -2,6 +2,8 @@ import Fastify from "fastify";
 import fp from "fastify-plugin";
 import closeWithGrace from "close-with-grace";
 
+import { serverFactory } from "fastify-uws";
+
 import serviceApp from "./app";
 import { initPassword } from "@services/auth/password";
 
@@ -19,6 +21,7 @@ const app = Fastify({
                   },
               },
     trustProxy: process.env.NODE_ENV === "production",
+    serverFactory,
 });
 
 closeWithGrace({ delay: 1000 }, async ({ err, signal }) => {
