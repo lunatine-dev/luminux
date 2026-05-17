@@ -62,9 +62,9 @@
                 <div
                     class="size-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 transition-transform group-hover:scale-105"
                 >
-                    <Brand.Icon class="size-6 text-primary-foreground stroke-3" />
+                    <Brand.Icon class="size-6 text-primary-foreground stroke-2" />
                 </div>
-                <span class="text-2xl font-black uppercase tracking-tighter italic text-foreground hidden md:block">
+                <span class="text-2xl font-black uppercase tracking-tighter italic text-foreground">
                     {Brand.name}
                 </span>
             </a>
