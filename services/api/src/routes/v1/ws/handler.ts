@@ -1,34 +1,96 @@
-import { InboundFrame, WebsocketHandler, WebsocketValidationHandler } from "@routes/v1/ws/schema";
+import { InboundFrame, WebsocketHandler } from "@routes/v1/ws/schema";
 import { API_KEY_PREFIX } from "@constants/security";
 import { getEventHandler, getUserSubscriptionTopics, isEventAllowed } from "./events";
+import { UserModel } from "@models/User";
+import { FastifyInstance } from "fastify";
 
-const extractUserIdFromKey = async (key: string, type: string): Promise<string> => {
-    // TODO: User ID extraction
+interface JwtPayload {
+    sub: string;
+    iat: number;
+    exp: number;
+}
+
+const extractUserIdFromKey = async (
+    key: string,
+    type: "OVERLAY" | "OVERWOLF" | "DASHBOARD",
+    fastify: FastifyInstance,
+): Promise<string> => {
     if (type === "OVERLAY" && key.startsWith(`${API_KEY_PREFIX}_ovl`)) {
-    }
-    if (type === "OVERWOLF" && key.startsWith(`${API_KEY_PREFIX}_ow`)) {
-    }
-    if (type === "DASHBOARD") {
+        const user = await UserModel.findOne({
+            "apiKeys.overlay": key,
+        });
+
+        if (!user) throw new Error("Invalid key");
+        return String(user._id);
     }
 
-    throw new Error("Invalid key format");
+    if (type === "OVERWOLF" && key.startsWith(`${API_KEY_PREFIX}_ow`)) {
+        const user = await UserModel.findOne({
+            "apiKeys.overwolf": key,
+        });
+
+        if (!user) throw new Error("Invalid key");
+        return String(user._id);
+    }
+
+    if (type === "DASHBOARD") {
+        try {
+            const decoded = fastify.jwt.verify<JwtPayload>(key);
+
+            if (!decoded || !decoded.sub) {
+                throw new Error("Token payload missing subject claim");
+            }
+
+            return decoded.sub;
+        } catch (err) {
+            throw new Error("Invalid or expired dashboard session token");
+        }
+    }
+
+    throw new Error("Invalid key format or unrecognized credential type");
 };
 
 export const handlers = {
     websocket: (async (socket, request) => {
         const { type } = request.query;
-        const userId = request.socketUserId;
+        let userId: string | null = null;
 
-        if (!userId) {
-            socket.send(JSON.stringify({ error: "Failed to authenticate user" }));
-            socket.close();
+        try {
+            const key = request.headers["sec-websocket-protocol"];
+            if (!key) throw new Error("Invalid key");
+            userId = await extractUserIdFromKey(key, type, request.server);
+        } catch (err) {
+            request.log.warn(`Authentication failed`);
+            socket.send(
+                JSON.stringify({
+                    eventName: "auth_failure",
+                    data: { message: "Session token expired or invalid." },
+                }),
+            );
+            setTimeout(() => {
+                try {
+                    socket.close(4001);
+                } catch (closeErr) {}
+            }, 100);
             return;
         }
 
-        request.log.info(`New ${type} streaming pipeline initialized`);
+        if (!userId) return; // Never too sure
+
+        const rawSocket = (socket as any).connection;
+        request.socketUserId = userId;
+
+        request.log.info(`New ${type} streaming pipeline initialized for ${userId}`);
 
         const topics = getUserSubscriptionTopics(userId, type);
-        topics.forEach((topic) => socket.subscribe(topic));
+        if (rawSocket && typeof rawSocket.subscribe === "function") {
+            topics.forEach((topic) => {
+                rawSocket.subscribe(topic);
+            });
+            request.log.info(`[uWS]: Native topic subscriptions initialized for user: ${userId}`);
+        } else {
+            request.log.error("[uWS]: Critical - Could not access underlying uWS connection object.");
+        }
 
         socket.on("message", async (rawData) => {
             try {
@@ -46,6 +108,7 @@ export const handlers = {
                 }
 
                 const handleEvent = getEventHandler(eventName);
+                console.log("Event name is ", eventName);
 
                 if (!handleEvent) {
                     request.log.warn(`Unregistered event: ${eventName}`);
@@ -64,15 +127,4 @@ export const handlers = {
             request.log.info(`WebSocket tunnel closed for ${type}.`);
         });
     }) satisfies WebsocketHandler,
-
-    preValidation: (async (request, reply) => {
-        const { key, type } = request.query;
-
-        try {
-            (request as any).socketUserId = await extractUserIdFromKey(key, type);
-        } catch (err) {
-            request.log.warn(`Authentication failed for key: ${key}`);
-            throw reply.unauthorized("Invalid authentication key");
-        }
-    }) satisfies WebsocketValidationHandler,
 };

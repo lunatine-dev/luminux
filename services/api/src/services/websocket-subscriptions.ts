@@ -35,7 +35,8 @@ class WebSocketSubscriptionRegistry {
 
         fastify.redisSub.on("pmessage", (pattern: string, channel: string, message: string) => {
             try {
-                fastify.websocketServer.publish(channel, message);
+                fastify.uws.publish(channel, message);
+                // fastify.websocketServer.publish(channel, message);
             } catch (err) {
                 fastify.log.error(err, `Failed to publish to channel: ${channel}`);
             }

@@ -20,6 +20,13 @@ export async function publishClusterTelemetry({
 }: ClusterPublishOptions): Promise<void> {
     const targetChannel = channelPattern.replace("*", userId);
 
+    console.log({
+        channelPattern,
+        userId,
+        eventName,
+        payload,
+        targetChannel,
+    });
     try {
         await request.server.redis.publish(
             targetChannel,

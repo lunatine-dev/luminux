@@ -14,9 +14,9 @@ export interface UwsWebSocket extends FastifyUwsWebSocket {
 
 // --- Shared Body Definitions ---
 export const WebsocketQuery = Type.Object({
-    key: Type.String({
-        description: "Authentication ticket / API key with proof of identity",
-    }),
+    // key: Type.String({
+    //     description: "Authentication ticket / API key with proof of identity",
+    // }),
     type: Type.Enum(["DASHBOARD", "OVERLAY", "OVERWOLF"]),
 });
 export const WebsocketResponse = Type.Object(
@@ -50,10 +50,6 @@ export const Schemas = {
 };
 
 // --- Handler Types ---
-export type WebsocketValidationHandler = (
-    request: FastifyRequest<{ Querystring: WebsocketQueryType }>,
-    reply: FastifyReply,
-) => void | Promise<void>;
 
 export type WebsocketHandler = (
     socket: UwsWebSocket,

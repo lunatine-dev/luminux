@@ -38,6 +38,25 @@ const init = async () => {
     app.log.info("Decoy hash generated");
 
     await app.ready();
+
+    const serverRegistry = app.server as any;
+    const serverSymbols = Object.getOwnPropertySymbols(serverRegistry);
+
+    // Look for the symbol that actually holds the uWS App instance objects
+    const uwsSymbol = serverSymbols.find((sym) => {
+        const value = serverRegistry[sym];
+        // The uWS app always exposes an .any or .listen method at the C++ level
+        return value && typeof value.any === "function";
+    });
+
+    if (uwsSymbol) {
+        const genericApp = app as any;
+        genericApp["uws"] = serverRegistry[uwsSymbol];
+        console.log("[uWS]: Successfully attached native C++ uWS instance!");
+    } else {
+        console.error("[uWS]: Critical - Could not identify the uWS engine symbol.");
+    }
+
     app.swagger();
     app.log.info("Plugins loaded");
 

@@ -20,6 +20,7 @@ export const getUserSubscriptionTopics = (userId: string, type: string): string[
 
     if (type === "OVERLAY" || type === "DASHBOARD") {
         topics.push(PATTERNS.overwatch.replace("*", userId));
+        console.log("Subscribed", topics);
     }
 
     return topics;
@@ -27,12 +28,14 @@ export const getUserSubscriptionTopics = (userId: string, type: string): string[
 
 export const getEventHandler = (eventName: string): WebsocketEventFn | undefined => {
     const [game] = eventName.split(":");
+    console.log(game, eventName);
     const registry = gameRegistries[game];
     if (!registry) return undefined;
 
     if (registry.customEvents && registry.customEvents[eventName]) {
         return registry.customEvents[eventName];
     }
+    console.log(eventName, game);
 
     if (registry.passThroughEvents && registry.passThroughEvents.includes(eventName)) {
         return async (socket, request, data) => {

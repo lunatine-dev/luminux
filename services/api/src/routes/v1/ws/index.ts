@@ -3,11 +3,7 @@ import { Schemas } from "./schema";
 import { handlers } from "./handler";
 
 const routes: FastifyPluginAsync = async (fastify) => {
-    fastify.get(
-        "/",
-        { websocket: true, schema: Schemas.Websocket, preValidation: handlers.preValidation },
-        handlers.websocket,
-    );
+    fastify.get("/", { websocket: true, schema: Schemas.Websocket }, handlers.websocket);
 };
 
 export default routes;
