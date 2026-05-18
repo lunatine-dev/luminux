@@ -27,6 +27,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (accessToken) {
         try {
             event.locals.user = jwt.verify(accessToken, JWT_SECRET) as User;
+            event.locals.token = accessToken;
             return resolve(event);
         } catch (err) {
             console.error(err);

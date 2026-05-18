@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { getContext, onMount } from "svelte";
+    import { useSocket } from "$lib/services/socket.svelte";
     import { page } from "$app/state";
 
     import * as Card from "$lib/components/ui/card";
@@ -29,37 +30,31 @@
     let showToken = $state(false);
     let isCopied = $state(false);
 
-    let apiToken = $state("lmx_live_64afc839e4b0c2a1103f84d2_zX91b");
-
     let logs = $state([]);
 
-    function handleCopyToken() {
-        navigator.clipboard.writeText(apiToken);
-        isCopied = true;
-        setTimeout(() => (isCopied = false), 2000);
-    }
+    let { data } = $props();
 
-    function handleRegenerateToken() {
-        if (
-            confirm(
-                "Are you absolute sure? Any active Overwolf companion connections using your old token will instantly drop.",
-            )
-        ) {
-            apiToken = "lmx_live_" + Math.random().toString(36).substring(2, 15);
-        }
-    }
-
-    function parseLogTelemetry(incomingPayload) {
-        return {
-            timestamp: new Date().toLocaleTimeString(),
-            type: incomingPayload.eventName || "telemetry",
-            title: "Game Metadata Received",
-            subtitle: JSON.stringify(incomingPayload.data),
-        };
-    }
-
+    const socket = useSocket();
     onMount(() => {
-        console.log(`Initialized integration monitor pipeline for: ${currentType}`);
+        const scoreboardUnsubscribe = socket.on("overwatch:scoreboard", (data) => {
+            console.log("Scoreboard", data);
+        });
+        const heroSwapUnsubscribe = socket.on("overwatch:hero_swap", (data) => {
+            logs = [
+                {
+                    timestamp: new Date().toLocaleDateString(),
+                    type: "hero_swap",
+                    title: "Hero Swap",
+                    subtitle: `${data.btag ?? data.playerName} swapped to ${data.newHero} (was ${data.oldHero})`,
+                },
+                ...logs,
+            ];
+            console.log("Hero swap", data);
+        });
+        return () => {
+            scoreboardUnsubscribe();
+            heroSwapUnsubscribe();
+        };
     });
 </script>
 
@@ -78,39 +73,54 @@
                         </p>
                     </div>
 
-                    <div class="relative flex items-center">
-                        <input
-                            type={showToken ? "text" : "password"}
-                            readonly
-                            value={apiToken}
-                            class="w-full pr-24 pl-3 py-2 text-xs font-mono rounded-lg border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none"
-                        />
-                        <div class="absolute right-1.5 flex items-center gap-1">
-                            <button
-                                onclick={() => (showToken = !showToken)}
-                                class="p-1.5 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
-                                title={showToken ? "Hide key" : "Show key"}
+                    {#await data.streamed.sessions}
+                        <div
+                            class="w-full h-9 animate-pulse rounded-lg border border-zinc-200 bg-zinc-100/50 dark:border-zinc-800/80 dark:bg-zinc-950 flex items-center px-3"
+                        >
+                            <span class="text-[11px] tracking-wide text-zinc-400 dark:text-zinc-500 font-sans"
+                                >Retrieving secure companion link...</span
                             >
-                                {#if showToken}<IconEyeOff size={14} />{:else}<IconEye size={14} />{/if}
-                            </button>
-                            <button
-                                onclick={handleCopyToken}
-                                class="p-1.5 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
-                                title="Copy Token"
-                            >
-                                {#if isCopied}<IconCheck size={14} class="text-green-500" />{:else}<IconCopy
-                                        size={14}
-                                    />{/if}
-                            </button>
                         </div>
-                    </div>
+                    {:then resolvedSessions}
+                        {@const currentOverwolfToken = resolvedSessions?.overwolf || "No active token found"}
+
+                        <div class="relative flex items-center">
+                            <input
+                                type={showToken ? "text" : "password"}
+                                readonly
+                                value={currentOverwolfToken}
+                                class="w-full pr-24 pl-3 py-2 text-xs font-mono rounded-lg border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none"
+                            />
+                            <div class="absolute right-1.5 flex items-center gap-1">
+                                <button
+                                    onclick={() => (showToken = !showToken)}
+                                    class="p-1.5 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                                    title={showToken ? "Hide key" : "Show key"}
+                                >
+                                    {#if showToken}<IconEyeOff size={14} />{:else}<IconEye size={14} />{/if}
+                                </button>
+                                <button
+                                    onclick={() => {
+                                        navigator.clipboard.writeText(currentOverwolfToken);
+                                        isCopied = true;
+                                        setTimeout(() => (isCopied = false), 2000);
+                                    }}
+                                    class="p-1.5 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                                    title="Copy Token"
+                                >
+                                    {#if isCopied}<IconCheck size={14} class="text-green-500" />{:else}<IconCopy
+                                            size={14}
+                                        />{/if}
+                                </button>
+                            </div>
+                        </div>
+                    {/await}
 
                     <div
                         class="flex items-center justify-between border-t border-zinc-200/40 dark:border-zinc-800/60 pt-3.5"
                     >
                         <span class="text-[11px] text-zinc-400 dark:text-zinc-500">Leaked or compromised?</span>
                         <button
-                            onclick={handleRegenerateToken}
                             class="flex items-center gap-1 text-[11px] font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                         >
                             <IconRefresh size={12} /> Regenerate Key
@@ -205,7 +215,7 @@
                                 </div>
                             {:else}
                                 <div class="space-y-3 pr-2">
-                                    {#each logs.map((l) => parseLogTelemetry(l)) as log}
+                                    {#each logs as log}
                                         <div
                                             class="group flex items-start gap-4 rounded-lg border border-zinc-200/60 bg-white/40 p-3.5 transition-colors hover:bg-zinc-50/80 dark:border-zinc-800/40 dark:bg-zinc-950/40 dark:hover:bg-zinc-900/40"
                                         >

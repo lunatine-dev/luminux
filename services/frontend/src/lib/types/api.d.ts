@@ -649,6 +649,254 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/users/@me/tokens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetches API tokens for logged in user */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            overwolf: string;
+                            overlay: string;
+                        };
+                    };
+                };
+                /** @description Standard Error Response */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Standard Error Response */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/users/@me/tokens/regenerate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Regenerates API token */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @enum {unknown} */
+                        target: "overwolf" | "overlay";
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            key: string;
+                        };
+                    };
+                };
+                /** @description Standard Error Response */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Standard Error Response */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ws/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Websocket Connection Handshake Gateway
+         * @description Initiates a persistent WebSocket connection. Requires switching protocols to WS/WSS.
+         */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Authentication ticket / API key with proof of identity */
+                    key: string;
+                    type: "DASHBOARD" | "OVERLAY" | "OVERWOLF";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Switching Protocols to WebSocket. Connection upgraded successfully. */
+                101: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": Record<string, never>;
+                    };
+                };
+                /** @description Standard Error Response */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Standard Error Response */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "statusCode": 500,
+                         *       "error": "Internal Server Error",
+                         *       "message": "There was an error processing your request"
+                         *     }
+                         */
+                        "application/json": {
+                            statusCode: number;
+                            error: string;
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {

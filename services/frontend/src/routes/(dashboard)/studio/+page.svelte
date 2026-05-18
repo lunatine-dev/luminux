@@ -1,65 +1,18 @@
 <script>
     import Page from "$lib/components/dashboard/content/Page.svelte";
 
+    import { useSocket } from "$lib/services/socket.svelte";
+
     import * as Card from "$lib/components/ui/card";
     import { Badge } from "$lib/components/ui/badge";
     import { ScrollArea } from "$lib/components/ui/scroll-area";
-    import { Switch } from "$lib/components/ui/switch";
-    import { Label } from "$lib/components/ui/label";
     import { onMount } from "svelte";
 
     let isOverwolfOnline = $state(true);
     let isObsConnected = $state(true);
-    let isMockFeedActive = $state(false);
-
-    function parseLogTelemetry(incomingPayload) {
-        let rawEvent = incomingPayload;
-
-        let title = "Update";
-        let subtitle = "";
-
-        if (rawEvent.data.feature === "roster") {
-            let roster = rawEvent.data.info.roster;
-            let firstRoster = JSON.parse(roster[Object.keys(roster)[0]]);
-            title = "Scoreboard";
-            subtitle = `${firstRoster.player_name} (${firstRoster.hero_name}): K/D/A: ${firstRoster.kills}/${firstRoster.deaths}/${firstRoster.assists}`;
-        }
-
-        return {
-            timestamp: incomingPayload.timestamp,
-            type: incomingPayload.event,
-            title,
-            subtitle,
-            tagType: incomingPayload.event,
-            rawPayload: incomingPayload,
-        };
-    }
 
     let logs = $state([]);
     let id = 0;
-    const newEvent = (data) => {
-        logs = [data, ...logs];
-
-        if (logs.length > 100) {
-            logs = logs.slice(0, 100);
-        }
-    };
-
-    let testEvents = [
-        {
-            timestamp: "2026-05-08T18:02:54.643Z",
-            event: "info_update",
-            data: {
-                feature: "roster",
-                info: {
-                    roster: {
-                        roster_4:
-                            '{"player_name":"YOKAPI","is_local":false,"hero_name":"LIFEWEAVER","hero_role":"SUPPORT","team":1,"kills":0,"deaths":0,"damage":64.8,"assists":0,"healed":0,"mitigated":0,"battlenet_tag":"Yokapi#2331","hero_id":657,"is_teammate":true}',
-                    },
-                },
-            },
-        },
-    ];
 
     let sessionWins = $state(0);
     let sessionLosses = $state(0);
@@ -78,14 +31,27 @@
     function refreshOverlayCache() {
         console.log("Purging local browser source cache objects...");
     }
-    let int;
-    onMount(() => {
-        int = setInterval(() => {
-            let item = testEvents[Math.floor(Math.random() * testEvents.length)];
-            newEvent(item);
-        }, 5000);
 
-        return () => clearInterval(int);
+    const socket = useSocket();
+    onMount(() => {
+        const unsubscribeAll = socket.onAny((eventName, data) => {
+            console.log(`[GLOBAL LOG] Event: ${eventName}`, data);
+
+            if (eventName.startsWith("overwatch:")) {
+                logs = [
+                    {
+                        eventName,
+                        data,
+                        timestamp: Date.now(),
+                    },
+                    ...logs,
+                ];
+            }
+        });
+
+        return () => {
+            unsubscribeAll();
+        };
     });
 </script>
 
@@ -204,7 +170,7 @@
                 <div class="flex-1 overflow-hidden">
                     <ScrollArea class="h-full p-5 font-mono text-xs">
                         <div class="space-y-3 pr-2">
-                            {#each logs.map((l) => parseLogTelemetry(l)) as log}
+                            {#each logs as log}
                                 <div
                                     class="group flex items-start gap-4 rounded-lg border border-zinc-200/60 bg-white/40 p-3.5 transition-colors hover:bg-zinc-50/80 dark:border-zinc-800/40 dark:bg-zinc-950/40 dark:hover:bg-zinc-900/40"
                                 >
@@ -214,41 +180,13 @@
 
                                     <div class="flex-1 space-y-1.5">
                                         <div class="flex items-center gap-2">
-                                            {#if log.tagType === "primary"}
-                                                <span
-                                                    class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 tracking-wider"
-                                                >
-                                                    {log.type}
-                                                </span>
-                                            {:else}
-                                                <span
-                                                    class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-zinc-100 text-zinc-700 border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700/80 tracking-wider"
-                                                >
-                                                    {log.type}
-                                                </span>
-                                            {/if}
-                                        </div>
-
-                                        <div class="font-sans">
-                                            <p
-                                                class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 capitalize"
+                                            <span
+                                                class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-zinc-100 text-zinc-700 border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700/80 tracking-wider"
                                             >
-                                                {log.title}
-                                            </p>
-                                            {#if log.subtitle}
-                                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-mono">
-                                                    {log.subtitle}
-                                                </p>
-                                            {/if}
+                                                {log.eventName.split(":").pop()}
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <button
-                                        onclick={() => console.log(log.rawPayload)}
-                                        class="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-primary dark:text-zinc-500 dark:hover:text-primary text-[11px] font-sans transition-all"
-                                    >
-                                        Inspect
-                                    </button>
                                 </div>
                             {/each}
                         </div>

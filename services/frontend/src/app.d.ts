@@ -6,6 +6,7 @@ declare global {
         // interface Error {}
         interface Locals {
             user: User | null;
+            token: String | null;
             api: {
                 get: <T>(path: string) => Promise<T>;
                 post: <T>(path: string, body: any) => Promise<T>;
