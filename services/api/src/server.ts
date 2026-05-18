@@ -52,9 +52,9 @@ const init = async () => {
     if (uwsSymbol) {
         const genericApp = app as any;
         genericApp["uws"] = serverRegistry[uwsSymbol];
-        console.log("[uWS]: Successfully attached native C++ uWS instance!");
+        app.log.info("[uWS]: Successfully attached native C++ uWS instance!");
     } else {
-        console.error("[uWS]: Critical - Could not identify the uWS engine symbol.");
+        app.log.error("[uWS]: Critical - Could not identify the uWS engine symbol.");
     }
 
     app.swagger();

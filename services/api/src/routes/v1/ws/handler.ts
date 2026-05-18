@@ -75,7 +75,7 @@ export const handlers = {
             return;
         }
 
-        if (!userId) return; // Never too sure
+        if (!userId) return; // Never to sure
 
         const rawSocket = (socket as any).connection;
         request.socketUserId = userId;

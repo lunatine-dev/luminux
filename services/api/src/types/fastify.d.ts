@@ -14,6 +14,7 @@ declare module "fastify" {
         config: Env;
         twitchOAuth2: OAuth2Namespace;
         websocketServer: any;
+        uws: any;
     }
     interface FastifyRequest {
         userDoc: User;
