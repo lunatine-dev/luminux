@@ -45,6 +45,7 @@ class OverwatchMatchTracker {
                         slotId,
                         playerName:
                             freshPlayerData.player_name || historicalPlayerData?.player_name || "Unknown Player",
+                        btag: freshPlayerData.battlenet_tag ?? "UNKNOWN",
                         oldHero: historicalPlayerData?.hero_name || "NONE",
                         newHero: freshPlayerData.hero_name,
                         isLocal: freshPlayerData.is_local ?? historicalPlayerData?.is_local ?? false,

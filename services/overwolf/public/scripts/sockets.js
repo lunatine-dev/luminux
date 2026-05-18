@@ -12,11 +12,10 @@ export function registerSockets(core) {
     }
 
     const wsUrl = new URL(SOCKET_HOST);
-    wsUrl.searchParams.append("key", core.token);
     wsUrl.searchParams.append("type", "OVERWOLF");
 
     connectionStartTime = Date.now();
-    const socket = new WebSocket(wsUrl.toString());
+    const socket = new WebSocket(wsUrl.toString(), core.token);
 
     socket.onopen = () => {
         core.isConnecting = false;
