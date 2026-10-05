@@ -41,6 +41,9 @@ importers:
       '@luminux/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@luminux/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -78,6 +81,9 @@ importers:
       '@luminux/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@luminux/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -115,6 +121,9 @@ importers:
       '@luminux/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@luminux/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -152,6 +161,9 @@ importers:
       '@luminux/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@luminux/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -185,6 +197,12 @@ importers:
         version: 8.3.2(jiti@2.7.0)
 
   packages/api: {}
+
+  packages/config:
+    dependencies:
+      '@sveltejs/kit':
+        specifier: ^3.0.0
+        version: 3.0.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.3.2(jiti@2.7.0)))(svelte@5.57.1)(vite@8.3.2(jiti@2.7.0))
 
   packages/ui:
     dependencies:

@@ -12,8 +12,9 @@
         "format": "prettier --write . --ignore-path ../../.prettierignore"
     },
     "dependencies": {
-        "@luminux/ui": "workspace:*",
         "@luminux/api": "workspace:*",
+        "@luminux/config": "workspace:*",
+        "@luminux/ui": "workspace:*",
         "@tabler/icons-svelte": "^3.48.0",
         "mode-watcher": "^1.1.0"
     },

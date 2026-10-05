@@ -1,0 +1,12 @@
+{
+    "name": "@luminux/config",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./env": "./src/env.js"
+    },
+    "dependencies": {
+        "@sveltejs/kit": "^3.0.0"
+    }
+}
