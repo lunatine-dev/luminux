@@ -4,7 +4,8 @@
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": [".svelte-kit/**", "build/**"]
+            "outputs": [".svelte-kit/**", "build/**"],
+            "env": ["PUBLIC_*"]
         },
         "dev": {
             "cache": false,
@@ -16,5 +17,13 @@
         "format": {
             "cache": false
         }
-    }
+    },
+    "globalEnv": [
+        "NODE_ENV",
+        "PUBLIC_API_URL",
+        "PUBLIC_URL",
+        "PUBLIC_ACCOUNT_URL",
+        "PUBLIC_STATS_URL",
+        "PUBLIC_STUDIO_URL"
+    ]
 }

@@ -2,10 +2,7 @@
     "extends": ["//"],
     "tasks": {
         "build": {
-            "env": ["PUBLIC_TEST"]
-        },
-        "dev": {
-            "env": ["PUBLIC_TEST"]
+            "env": ["$TURBO_EXTENDS$"]
         }
     }
 }
