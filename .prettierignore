@@ -1,0 +1,8 @@
+# Package Managers
+pnpm-lock.yaml
+
+# Build Output
+node_modules
+.svelte-kit
+build
+.turbo
