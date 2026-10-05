@@ -38,6 +38,9 @@ importers:
 
   apps/account:
     dependencies:
+      '@luminux/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -72,6 +75,9 @@ importers:
 
   apps/main:
     dependencies:
+      '@luminux/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -106,6 +112,9 @@ importers:
 
   apps/stats:
     dependencies:
+      '@luminux/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -140,6 +149,9 @@ importers:
 
   apps/studio:
     dependencies:
+      '@luminux/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@luminux/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -171,6 +183,8 @@ importers:
       vite:
         specifier: ^8.3.2
         version: 8.3.2(jiti@2.7.0)
+
+  packages/api: {}
 
   packages/ui:
     dependencies:
