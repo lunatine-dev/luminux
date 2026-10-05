@@ -5,10 +5,10 @@
     import { toggleMode } from "mode-watcher";
 
     // Icons
-    import { IconSun, IconMoon, IconBolt, IconBrandDiscord } from "@tabler/icons-svelte";
+    import { IconSun, IconMoon, IconBolt, IconBrandDiscord, IconMenu2 } from "@tabler/icons-svelte";
 
     // Components
-    import { Button, IsMobile, Brand, NavigationMenu } from "@luminux/ui";
+    import { Button, IsMobile, Brand, NavigationMenu, Sheet } from "@luminux/ui";
     import NavItem from "./NavItem.svelte";
     import NavDropdown from "./NavDropdown.svelte";
 
@@ -110,6 +110,25 @@
                     <span class="sr-only">Toggle theme</span>
                 </Button>
             {/if}
+        </div>
+
+        <div class="flex lg:hidden">
+            <Sheet.Root bind:open={mobileMenuOpen}>
+                <Sheet.Trigger class="p-2 -mr-2 rounded-md hover:bg-muted transition-colors">
+                    <IconMenu2 class="size-6" />
+                </Sheet.Trigger>
+
+                <Sheet.Content
+                    side="top"
+                    class="w-full h-auto max-h-[92vh] px-0 bg-background border-b shadow-2xl flex flex-col rounded-b-3xl"
+                >
+                    <Sheet.Header class="px-6 border-b pb-4">
+                        <Sheet.Title class="text-left font-bold text-xl tracking-tight">
+                            {Brand.name}
+                        </Sheet.Title>
+                    </Sheet.Header>
+                </Sheet.Content>
+            </Sheet.Root>
         </div>
     </div>
 </div>

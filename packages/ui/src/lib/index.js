@@ -10,6 +10,7 @@ export { default as Navbar } from "./components/nav/Navbar.svelte";
 // shad-cn components
 export * as Card from "./components/ui/card/index.js";
 export * as NavigationMenu from "./components/ui/navigation-menu/index.js";
+export * as Sheet from "./components/ui/sheet/index.js";
 export { Button, buttonVariants } from "./components/ui/button/index.js";
 export { Input } from "./components/ui/input/index.js";
 export { Label } from "./components/ui/label/index.js";
