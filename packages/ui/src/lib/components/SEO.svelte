@@ -5,7 +5,7 @@
         image = "https://luminux.app/favicon/web-app-manifest-512x512.png",
         type = "website",
         url = "https://luminux.app",
-        siteName = "Luminux"
+        siteName = "Luminux",
     } = $props();
 
     let fullTitle = $derived(title ? `${title} - ${siteName}` : siteName);
