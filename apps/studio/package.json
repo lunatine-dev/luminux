@@ -16,7 +16,8 @@
         "@luminux/config": "workspace:*",
         "@luminux/ui": "workspace:*",
         "@tabler/icons-svelte": "^3.48.0",
-        "mode-watcher": "^1.1.0"
+        "mode-watcher": "^1.1.0",
+        "valibot": "^1.5.0"
     },
     "devDependencies": {
         "@sveltejs/adapter-node": "^6.0.0",
